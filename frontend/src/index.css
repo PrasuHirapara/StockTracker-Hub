@@ -1,0 +1,33 @@
+* {
+  padding: 0px;
+  margin: 0px;
+  font-family: "Times New Roman", Times, serif;
+  background: var(--primary);
+  color: var(--tertiary);
+}
+:root {
+  --primary: #0d1117;
+  --secondary: #292e36;
+  --tertiary: #e6edf3;
+}
+.text-lg {
+  color: var(--darkblue);
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 27px;
+}
+.text-md {
+  color: var(--darkblue);
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 24px;
+}
+.text-sm {
+  color: var(--black);
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 21px;
+}
