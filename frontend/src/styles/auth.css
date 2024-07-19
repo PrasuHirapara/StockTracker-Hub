@@ -4,7 +4,6 @@
   align-items: center;
   justify-content: center;
 }
-
 .auth--container {
   background-color: var(--secondary);
   border-radius: 20px;
@@ -12,30 +11,25 @@
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   width: 400px;
 }
-
 .auth--heading {
   text-align: center;
   margin-bottom: 20px;
 }
-
 .auth--form {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 }
-
 .auth--form--field {
   margin-bottom: 15px;
   width: 100%;
 }
-
 .auth--form--field label {
   display: block;
   font-weight: 500;
   margin-bottom: 5px;
 }
-
 .auth--form--field input {
   width: 100%;
   color: rgb(0, 0, 0);
@@ -44,7 +38,6 @@
   border: 2px solid #ccc;
   border-radius: 7px;
 }
-
 .auth-btn {
   padding: 13px 30px;
   margin-top: 15px;
@@ -56,15 +49,12 @@
   cursor: pointer;
   transition: background-color ease 0.5s;
 }
-
 .auth-btn:hover {
   background-color: rgba(128, 128, 128, 0.263);
 }
-
 .auth--link {
   text-align: center;
 }
-
 .auth--link  a{
   color: white;
   font-weight: bold;
