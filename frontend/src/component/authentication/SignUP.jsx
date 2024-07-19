@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 export default function SignUp() {
-
     const navigate = useNavigate();
 
     const [signupInfo, setSignupInfo] = useState({
@@ -19,10 +18,10 @@ export default function SignUp() {
         });
     }
 
-    const handleSignUp = async(e) => {
+    const handleSignUp = async (e) => {
         e.preventDefault();
 
-        try{
+        try {
             const URL = "http://localhost:5000/auth/signup";
 
             const res = await fetch(URL, {
@@ -37,52 +36,67 @@ export default function SignUp() {
             if (result.success) {
                 setTimeout(() => {
                     navigate('/login');
-                });
+                }, 500);
             } else {
-                alert("Error occured")
+                alert("Error occurred");
             }
 
-        }catch(e){
+        } catch (e) {
             console.error(e);
         }
     }
-    
+
     return (
         <>
-            <div id="signup" className="signup--container">
-                <h1>Sign Up</h1>
-                <form onSubmit={handleSignUp}>
-                    <label htmlFor='name'>Name</label>
-                    <input
-                        onChange={handleChange}
-                        type='text'
-                        name='name'
-                        autofocus
-                        placeholder="Enter Name"
-                        value={signupInfo.name}
-                    />
-                    <label htmlFor='email'>Email</label>
-                    <input
-                        onChange={handleChange}
-                        type='email'
-                        name='email'
-                        placeholder="Enter Email"
-                        value={signupInfo.email}
-                    />
-                    <label htmlFor='password'>Password</label>
-                    <input
-                        onChange={handleChange}
-                        type='password'
-                        name='password'
-                        placeholder="Enter Password"
-                        value={signupInfo.password}
-                    />
-                    <button>SignUp</button>
-                    <span>
-                        Already have an account ?
-                        <Link to="signin">Login</Link>
-                    </span>
-                </form>
+            <div className="auth">
+                <div id="signup" className="auth--container">
+                    <div className="auth--heading">
+                        <h1>Sign Up</h1>
+                    </div>
+                    <form onSubmit={handleSignUp} className="auth--form">
+                        <div className="auth--form--field">
+                            <label htmlFor='name'>Name</label>
+                            <input
+                                onChange={handleChange}
+                                type='text'
+                                name='name'
+                                autoFocus
+                                placeholder="Enter Name"
+                                value={signupInfo.name}
+                                required
+                            />
+                        </div>
+                        <div className="auth--form--field">
+                            <label htmlFor='email'>Email</label>
+                            <input
+                                onChange={handleChange}
+                                type='email'
+                                name='email'
+                                placeholder="Enter Email"
+                                value={signupInfo.email}
+                                required
+                            />
+                        </div>
+                        <div className="auth--form--field">
+                            <label htmlFor='password'>Password</label>
+                            <input
+                                onChange={handleChange}
+                                type='password'
+                                name='password'
+                                placeholder="Enter Password"
+                                value={signupInfo.password}
+                                required
+                            />
+                        </div>
+                        <button className='auth-btn' type='submit'>Sign Up</button>
+                        <div className="auth--link">
+                            <span>
+                                Already have an account?
+                                <Link to="/signin">  Sign In</Link>
+                            </span>
+                        </div>
+                    </form>
+                </div>
             </div>
         </>
     );

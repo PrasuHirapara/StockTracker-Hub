@@ -1,8 +1,7 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 export default function SignIn() {
-
     const navigate = useNavigate();
 
     const [signinInfo, setSignInInfo] = useState({
@@ -18,10 +17,10 @@ export default function SignIn() {
         });
     }
 
-    const handleSignIn = async(e) => {
+    const handleSignIn = async (e) => {
         e.preventDefault();
 
-        try{
+        try {
             const URL = "http://localhost:5000/auth/signin";
 
             const res = await fetch(URL, {
@@ -33,49 +32,60 @@ export default function SignIn() {
             });
 
             const result = await res.json();
+
             if (result.success) {
                 localStorage.setItem("token", result.jwtToken);
                 localStorage.setItem("signinedUser", result.name);
                 setTimeout(() => {
                     navigate('/homepage');
-                });
+                }, 500);
             } else {
-                alert("Error occured")
+                alert("Invalid Credential");
             }
 
-        }catch(e){
+        } catch (e) {
             console.error(e);
         }
     }
-    
+
     return (
-        <>
-            <div id="signin" className="signin--container">
-                <h1>Sign In</h1>
-                <form onSubmit={handleSignIn}>
-                    <label htmlFor='email'>Email</label>
-                    <input
-                        onChange={handleChange}
-                        type='email'
-                        name='email'
-                        placeholder="Enter Email"
-                        value={signinInfo.email}
-                    />
-                    <label htmlFor='password'>Password</label>
-                    <input
-                        onChange={handleChange}
-                        type='password'
-                        name='password'
-                        placeholder="Enter Password"
-                        value={signinInfo.password}
-                    />
-                    <button>SignIn</button>
-                    <span>
-                        Don't have an account
-                        <Link to="signup">Sign up</Link>
-                    </span>
+        <div className="auth">
+            <div id="signin" className="auth--container">
+                <div className="auth--heading">
+                    <h1>Sign In</h1>
+                </div>
+                <form onSubmit={handleSignIn} className="auth--form">
+                    <div className="auth--form--field">
+                        <label htmlFor='email'>Email</label>
+                        <input
+                            onChange={handleChange}
+                            type='email'
+                            name='email'
+                            placeholder="Enter Email"
+                            value={signinInfo.email}
+                            required
+                        />
+                    </div>
+                    <div className="auth--form--field">
+                        <label htmlFor='password'>Password</label>
+                        <input
+                            onChange={handleChange}
+                            type='password'
+                            name='password'
+                            placeholder="Enter Password"
+                            value={signinInfo.password}
+                            required
+                        />
+                    </div>
+                    <button className='auth-btn' type='submit'>Sign In</button>
+                    <div className="auth--link">
+                        <span>
+                            Don't have an account?
+                            <Link to="/signup">  Sign up</Link>
+                        </span>
+                    </div>
                 </form>
             </div>
-        </>
+        </div>
     );
 }
