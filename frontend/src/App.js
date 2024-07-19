@@ -1,18 +1,15 @@
-import { BrowserRouter, Router, Route } from 'react-router-dom'
-import Home from './component/homepage/index'
-import Login from './component/authentication/LogIn';
+import { Navigate, Route, Routes } from 'react-router-dom';
+import Home from './component/homepage/index';
+import SignIn from './component/authentication/SignIn.jsx';
 import SignUp from './component/authentication/SignUP';
 
 export default function App() {
   return (
-    <>
-      <BrowserRouter>
-        <Router>
-          <Route path='/' element={<Home />}></Route>
-          <Route path='/signin' element={<Login />}></Route>
-          <Route path='/signup' element={<SignUp />}></Route>
-        </Router>
-      </BrowserRouter>
-    </>
+    <Routes>
+      <Route path='/' element={<Navigate to='/SignIn' />} />
+      <Route path='/homepage' element={<Home />} />
+      <Route path='/signin' element={<SignIn />} />
+      <Route path='/signup' element={<SignUp />} />
+    </Routes>
   );
 }

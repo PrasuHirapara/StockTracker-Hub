@@ -1,42 +1,43 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-export default function SignUp() {
+export default function SignIn() {
 
     const navigate = useNavigate();
 
-    const [signupInfo, setSignupInfo] = useState({
-        name: "",
+    const [signinInfo, setSignInInfo] = useState({
         email: "",
         password: ""
     });
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setSignupInfo({
-            ...signupInfo,
+        setSignInInfo({
+            ...signinInfo,
             [name]: value
         });
     }
 
-    const handleSignUp = async(e) => {
+    const handleSignIn = async(e) => {
         e.preventDefault();
 
         try{
-            const URL = "http://localhost:5000/auth/signup";
+            const URL = "http://localhost:5000/auth/signin";
 
             const res = await fetch(URL, {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(signupInfo)
+                body: JSON.stringify(signinInfo)
             });
 
             const result = await res.json();
             if (result.success) {
+                localStorage.setItem("token", result.jwtToken);
+                localStorage.setItem("signinedUser", result.name);
                 setTimeout(() => {
-                    navigate('/login');
+                    navigate('/homepage');
                 });
             } else {
                 alert("Error occured")
@@ -49,25 +50,16 @@ export default function SignUp() {
     
     return (
         <>
-            <div id="signup" className="signup--container">
-                <h1>Sign Up</h1>
-                <form onSubmit={handleSignUp}>
-                    <label htmlFor='name'>Name</label>
-                    <input
-                        onChange={handleChange}
-                        type='text'
-                        name='name'
-                        autofocus
-                        placeholder="Enter Name"
-                        value={signupInfo.name}
-                    />
+            <div id="signin" className="signin--container">
+                <h1>Sign In</h1>
+                <form onSubmit={handleSignIn}>
                     <label htmlFor='email'>Email</label>
                     <input
                         onChange={handleChange}
                         type='email'
                         name='email'
                         placeholder="Enter Email"
-                        value={signupInfo.email}
+                        value={signinInfo.email}
                     />
                     <label htmlFor='password'>Password</label>
                     <input
@@ -75,12 +67,12 @@ export default function SignUp() {
                         type='password'
                         name='password'
                         placeholder="Enter Password"
-                        value={signupInfo.password}
+                        value={signinInfo.password}
                     />
-                    <button>SignUp</button>
+                    <button>SignIn</button>
                     <span>
-                        Already have an account ?
-                        <Link to="signin">Login</Link>
+                        Don't have an account
+                        <Link to="signup">Sign up</Link>
                     </span>
                 </form>
             </div>
