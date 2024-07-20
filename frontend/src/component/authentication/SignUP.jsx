@@ -35,7 +35,7 @@ export default function SignUp() {
             const result = await res.json();
             if (result.success) {
                 setTimeout(() => {
-                    navigate('/login');
+                    navigate('/signin');
                 }, 500);
             } else {
                 alert("Error occurred");

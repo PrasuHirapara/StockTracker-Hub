@@ -1,9 +1,9 @@
 @import './auth.css';
+@import './navbar.css';
 
 body{
   padding: 0px;
   margin: 0px;
-  font-family: "Times New Roman", Times, serif;
   background: var(--primary);
   color: var(--tertiary);
 }
