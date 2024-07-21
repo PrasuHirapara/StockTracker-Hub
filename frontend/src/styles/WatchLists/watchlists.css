@@ -1,0 +1,92 @@
+.watchlists--container {
+  background-color: var(--secondary);
+  display: flex;
+  align-items: center;
+  padding: 5px 20px;
+  margin: 20px;
+  border-radius: 20px;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.watchlists--container::-webkit-scrollbar {
+  display: none;
+}
+
+.watchlists--add {
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+  cursor: pointer;
+  flex-shrink: 0;
+  position: sticky;
+  left: 0;
+  margin-right: 10px;
+  background-color: var(--secondary);
+}
+
+.watchlists--add img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  background-color: whitesmoke;
+}
+
+.watchlists--watchlist {
+  display: flex;
+  align-items: center;
+  padding-left: 10px;
+}
+
+.watchlists--watchlist--container {
+  height: 30px;
+  display: flex;
+  align-items: center;
+  padding: 0px 10px;
+  margin-right: 10px;
+  border: 1px solid var(--tertiary);
+  border-radius: 10px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.watchlists--watchlist--container.selected {
+  border: 2px solid black;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+.overlay-content {
+  height: 50vh;
+  width: 50vh;
+  background: var(--secondary);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  border-radius: 20px;
+}
+
+.overlay-close {
+  position: absolute;
+  font-size: medium;
+  font-weight: bold;
+  top: 10px;
+  right: 10px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}

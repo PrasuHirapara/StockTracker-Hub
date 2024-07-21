@@ -1,0 +1,35 @@
+.addwatchlist--container {
+  margin-top: 40px;
+}
+.addwatchlist--container form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.addwatchlist--label {
+  font-weight: 500;
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+.addwatchlist--input {
+  height: 25px;
+  border-radius: 20px;
+  padding-left: 10px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+.addwatchlist--btn {
+  padding: 13px 30px;
+  margin-top: 15px;
+  margin-bottom: 10px;
+  background-color: var(--primary);
+  color: #bbbbbb;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color ease 0.5s;
+}
+.addwatchlist--btn:hover {
+  background-color: rgba(128, 128, 128, 0.263);
+}

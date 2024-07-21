@@ -1,5 +1,9 @@
 @import './auth.css';
 @import './navbar.css';
+@import './WatchLists/watchlists.css';
+@import './WatchLists/addWatchList.css';
+@import './WatchList/watchlist.css';
+@import './WatchList/addStock.css';
 
 body{
   padding: 0px;
