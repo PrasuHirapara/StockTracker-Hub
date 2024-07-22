@@ -4,6 +4,7 @@ const path = require('path');
 const connectDB = require('./config/db')
 const cors = require('cors');
 const AuthRouter = require("./routes/auth/AuthRouter.js")
+const WatchlistsRouter = require('./routes/watchlists/WatchlistsRouter.js');
 const app = express();
 
 connectDB();
@@ -15,6 +16,7 @@ app.use(express.urlencoded({ extended: false }));
 
 // routes
 app.use('/auth', AuthRouter);
+app.use('/watchlists', WatchlistsRouter)
 
 // start server
 const port = process.env.PORT || 5000;
