@@ -5,7 +5,7 @@ const Joi = require('joi');
 
 const listSchema = Joi.object().pattern(Joi.string(), Joi.array().items(Joi.string()));
 
-router.get('/watchlists', getWatchlists);
-router.post('/watchlists', validateMiddleware(listSchema), createOrUpdateWatchlist);
+router.get('/', getWatchlists);
+router.post('/', validateMiddleware(listSchema), createOrUpdateWatchlist);
 
 module.exports = router;

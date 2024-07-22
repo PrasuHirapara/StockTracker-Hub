@@ -2,59 +2,50 @@ import { useEffect, useState } from "react";
 import AddWatchList from "./AddWatchList";
 
 export default function WatchLists({ func }) {
-    const [watchlists, setWatchlists] = useState({
-        "default": ["nifty 50", "sensex", "bank nifty"]
-    });
-    const [selectedWatchlist, setSelectedWatchlist] = useState("");
+    const [watchlists, setWatchlists] = useState({});
+    const [selectedWatchlist, setSelectedWatchlist] = useState();
     const [isOverlayVisible, setIsOverlayVisible] = useState(false);
 
     // Fetch watchlists from the server when the component mounts
     useEffect(() => {
         const fetchWatchlists = async () => {
-
             try {
+
                 const response = await fetch('http://localhost:5000/watchlists');
                 const data = await response.json();
+
                 setWatchlists(data);
+
                 const firstWatchlistName = Object.keys(data)[0];
+
                 if (firstWatchlistName) {
                     setSelectedWatchlist(firstWatchlistName);
                     func({ name: firstWatchlistName, items: data[firstWatchlistName] });
                 }
+                
             } catch (error) {
-                console.error("Error fetching watchlists:", error);
+                console.error("Error fetching watchlists", error);
             }
         };
 
         fetchWatchlists();
-    }, [func]);
+    }, [isOverlayVisible]);
 
-    // pass selected watchlist to parent component
+    // Update parent component when selected Watchlist changes
     useEffect(() => {
         if (selectedWatchlist) {
             func({ name: selectedWatchlist, items: watchlists[selectedWatchlist] });
         }
-    }, [selectedWatchlist, watchlists, func]);
+    }, [selectedWatchlist]);
 
-    // selected watchlist
     const handleClick = (watchlistName) => {
         setSelectedWatchlist(watchlistName);
         func({ name: watchlistName, items: watchlists[watchlistName] });
     };
 
-    // add watchlist
     const handleImageClick = async () => {
+
         setIsOverlayVisible(true);
-        try {
-            const response = await fetch('/api/watchlists');
-            const data = await response.json();
-            setWatchlists(data);
-            if (selectedWatchlist && data[selectedWatchlist]) {
-                func({ name: selectedWatchlist, items: data[selectedWatchlist] });
-            }
-        } catch (error) {
-            console.error("Error fetching watchlists:", error);
-        }
     };
 
     const handleOverlayClose = () => {

@@ -45,14 +45,15 @@
   align-items: center;
   padding: 0px 10px;
   margin-right: 10px;
-  border: 1px solid var(--tertiary);
+  border: 1px solid grey;
   border-radius: 10px;
   cursor: pointer;
   flex-shrink: 0;
 }
 
 .watchlists--watchlist--container.selected {
-  border: 2px solid black;
+  border: 1px solid white;
+  background-color: black;
 }
 
 .overlay {

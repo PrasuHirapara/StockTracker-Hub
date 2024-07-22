@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import NavBar from './NavBar.jsx';
 import WatchLists from './WatchLists/WatchLists.jsx';
 import WatchList from './WatchList/WatchList.jsx';
@@ -6,9 +6,9 @@ import WatchList from './WatchList/WatchList.jsx';
 export default function Home() {
     const [watchlist, setWatchlist] = useState({ name: '', items: [] });
 
-    const handleWatchlistChange = (data) => {
+    const handleWatchlistChange = useCallback((data) => {
         setWatchlist(data);
-    };
+    });
 
     return (
         <div id="homepage" className="homepage--container">

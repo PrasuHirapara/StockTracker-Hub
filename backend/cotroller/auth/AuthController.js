@@ -1,7 +1,7 @@
 const bcrypt = require("bcrypt");
 const UserModel = require('../../model/auth/AuthUser.js');
 const jwt = require('jsonwebtoken');
-const { isValidObjectId } = require("mongoose");
+const mongoose = require("mongoose");
 
 const signup = async (req, res) => {
     try {

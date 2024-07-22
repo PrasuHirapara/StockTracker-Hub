@@ -62,6 +62,7 @@ export default function SignIn() {
                             onChange={handleChange}
                             type='email'
                             name='email'
+                            autoFocus
                             placeholder="Enter Email"
                             value={signinInfo.email}
                             required

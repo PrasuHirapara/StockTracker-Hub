@@ -5,7 +5,9 @@ export default function AddWatchList() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
         try {
+
             const response = await fetch('http://localhost:5000/watchlists', {
                 method: 'POST',
                 headers: {
@@ -14,14 +16,19 @@ export default function AddWatchList() {
                 body: JSON.stringify({ [watchlistName]: [] }),
             });
 
-            if (!response.success) {
-                alert('Network response was not ok');
+            if (!response.ok) {
+                const errorData = await response.json();
+                alert(`Error ${errorData}`);
+
+                return;
             }
 
-            const data = await response.json();
             setWatchlistName("");
+            alert("Watchlist created successfully");
+
         } catch (error) {
-            alert("error occured")
+            console.error("Error occurred:", error);
+            alert("An error occurred");
         }
     };
 
@@ -33,6 +40,7 @@ export default function AddWatchList() {
                     className="addwatchlist--input"
                     type="text"
                     value={watchlistName}
+                    autoFocus
                     onChange={(e) => setWatchlistName(e.target.value)}
                     required
                 />
