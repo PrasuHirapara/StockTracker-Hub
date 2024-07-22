@@ -1,0 +1,133 @@
+.watchlist--container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  background-color: var(--secondary);
+  margin: 20px;
+  border-radius: 20px;
+  height: 70vh;
+}
+
+.watchlist--details {
+  width: 30%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  padding: 20px;
+  height: 100%;
+}
+
+.watchlist--name {
+  font-size: 25px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.watchlist--list {
+  overflow-y: auto;
+  flex-grow: 1;
+  margin-top: 20px;
+  margin-bottom: 60px;
+}
+
+.watchlist--list > ol {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  counter-reset: list-item;
+}
+
+.watchlist--list > ol > li {
+  padding: 10px 20px;
+  margin: 5px 0;
+  display: flex;
+  align-items: center;
+  border-radius: 20px;
+}
+
+.watchlist--list > ol > li::before {
+  content: counter(list-item) ". ";
+  counter-increment: list-item;
+  margin-right: 10px;
+}
+
+.watchlist--list > ol > li:hover {
+  border: 2px solid black;
+  cursor: pointer;
+  background-color: rgb(70, 69, 69);
+  border-radius: 20px;
+}
+
+.watchlist--stock {
+  padding: 5px 0;
+}
+
+.watchlist--add {
+  position: absolute;
+  bottom: 50px;
+  width: calc(100% - 50px);
+}
+
+.watchlist--add-btn {
+  font-size: 15px;
+  font-weight: bold;
+  width: 100%;
+  background-color: var(--primary);
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.watchlist--line {
+  border-left: 2px solid white;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+.watchlist--graph {
+  width: 65%;
+  height: 100%;
+  background-color: var(--primary-light);
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+.overlay--content {
+  height: 50vh;
+  width: 50vh;
+  background-color: var(--secondary);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  border-radius: 20px;
+}
+
+.overlay--close {
+  position: absolute;
+  font-size: medium;
+  font-weight: bold;
+  top: 10px;
+  right: 10px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.watchlist--separator {
+  border: none;
+  border-top: 2px solid white;
+  margin: 20px 0;
+  width: 100%;
+}
