@@ -1,19 +1,53 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AddStock from './AddStock.jsx';
 
 export default function WatchList({ name, items }) {
 
     const [isOverlay, setIsOverlay] = useState(false);
+    const [symbol, setSymbol] = useState("IBM");
+    const [timeframe, setTimeframe] = useState("1d");
+    const [stockData, setStockData] = useState(null);
+    const [error, setError] = useState('Loading');
 
-    // overlay open
+    const fetchStockData = async () => {
+        const response = await fetch('http://localhost:5000/stock', {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                "symbol": symbol,
+                'timeframe': timeframe
+            })
+        });
+
+        if (!response.ok) {
+            setError(response.arrayBuffer);
+            return;
+        }
+
+        const data = await response.json();
+        setStockData(data);
+    };
+
+    useEffect(() => {
+    }, [symbol, timeframe]);
+
+    const handleStockClick = (stock) => {
+        setSymbol(stock);
+    };
+
+    const handleTimeframeClick = (time) => {
+        setTimeframe(time);
+    };
+
     const handleOverlayOpen = () => {
         setIsOverlay(true);
-    }
+    };
 
-    // overlay closed
     const handleOverlayClose = () => {
         setIsOverlay(false);
-    }
+    };
 
     if (!items || !Array.isArray(items)) {
         return <div>No items available</div>;
@@ -29,7 +63,7 @@ export default function WatchList({ name, items }) {
                 <div className="watchlist--list">
                     <ol>
                         {items.map((stock, index) => (
-                            <li key={index} className="watchlist--stock">
+                            <li onClick={() => handleStockClick(stock)} key={index} className="watchlist--stock">
                                 {stock}
                             </li>
                         ))}
@@ -40,13 +74,34 @@ export default function WatchList({ name, items }) {
                 </div>
             </div>
             <div className="watchlist--line"></div>
-            <div className="watchlist--graph"></div>
-            {isOverlay ? <div className="overlay">
-                <div className="overlay--content">
-                    <button onClick={handleOverlayClose} className="overlay--close">Close</button>
-                    <AddStock />
+            <div className="watchlist--graph">
+                <div className="watchlist--graph--draw">
+                    {stockData ? (
+                        <div className="graph"></div>
+                    ) : (
+                        <p>{error}</p>
+                    )}
                 </div>
-            </div> : null}
+                <div className="watchlist--graph--timeframe">
+                    {["1d", "1m", "6m", "1y", "all"].map((time) => (
+                        <div 
+                            key={time}
+                            onClick={() => handleTimeframeClick(time)}
+                            className={`timeframe ${timeframe === time ? 'selected' : ''}`}
+                        >
+                            {time}
+                        </div>
+                    ))}
+                </div>
+            </div>
+            {isOverlay && (
+                <div className="overlay">
+                    <div className="overlay--content">
+                        <button onClick={handleOverlayClose} className="overlay--close">Close</button>
+                        <AddStock />
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

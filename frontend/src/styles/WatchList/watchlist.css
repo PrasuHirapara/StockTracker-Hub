@@ -89,8 +89,38 @@
   width: 65%;
   height: 100%;
   background-color: var(--primary-light);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
-
+.watchlist--graph--draw{
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+.watchlist--graph--draw p{
+  color: red;
+  text-align: center;
+}
+.watchlist--graph--timeframe {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+.timeframe {
+  font-size: 14px;
+  font-weight: bold;
+  margin-right: 13px;
+  padding: 8px;
+  border: 2px solid grey;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.timeframe.selected{
+  border: 1px solid white;
+  background-color: black;
+}
 .overlay {
   position: fixed;
   top: 0;
