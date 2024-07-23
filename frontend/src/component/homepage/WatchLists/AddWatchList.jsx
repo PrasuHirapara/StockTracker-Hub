@@ -7,25 +7,38 @@ export default function AddWatchList() {
         e.preventDefault();
 
         try {
+            const email = localStorage.getItem('email');
 
+            if (!email) {
+                alert("Email not found in local storage");
+                return;
+            }
+
+            if (!watchlistName.trim()) {
+                alert("Watchlist name cannot be empty");
+                return;
+            }
             const response = await fetch('http://localhost:5000/watchlists', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ [watchlistName]: [] }),
+                body: JSON.stringify({
+                    email,
+                    value: {
+                        [watchlistName.trim()]: []
+                    }
+                }),
             });
 
             if (!response.ok) {
                 const errorData = await response.json();
-                alert(`Error ${errorData}`);
-
+                alert(`Error: ${errorData.message}`);
                 return;
             }
 
             setWatchlistName("");
             alert("Watchlist created successfully");
-
         } catch (error) {
             console.error("Error occurred:", error);
             alert("An error occurred");
@@ -35,9 +48,10 @@ export default function AddWatchList() {
     return (
         <div className="addwatchlist--container">
             <form onSubmit={handleSubmit} className="addwatchlist--form">
-                <label className="addwatchlist--label">Watch list name</label>
+                <label className="addwatchlist--label" htmlFor="watchlistName">Watchlist name</label>
                 <input
                     className="addwatchlist--input"
+                    id="watchlistName"
                     type="text"
                     value={watchlistName}
                     autoFocus

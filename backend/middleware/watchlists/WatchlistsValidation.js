@@ -1,13 +1,8 @@
 const Joi = require('joi');
 
-const validateBody = (schema) => {
-  return (req, res, next) => {
-    const { error } = schema.validate(req.body);
-    if (error) {
-      return res.status(400).json({ message: error.details[0].message, success: false });
-    }
-    next();
-  };
-};
+const watchlistSchema = Joi.object({
+  email: Joi.string().email().required(),
+  value: Joi.object().pattern(Joi.string(), Joi.array().items(Joi.string())).required()
+});
 
-module.exports = validateBody;
+module.exports = watchlistSchema;

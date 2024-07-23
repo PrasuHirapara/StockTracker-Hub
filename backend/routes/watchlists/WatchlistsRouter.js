@@ -1,11 +1,7 @@
 const router = require('express').Router();
-const { getWatchlists, createOrUpdateWatchlist } = require('../../cotroller/watchlists/WatchListsController');
-const validateMiddleware = require('../../middleware/watchlists/WatchlistsValidation.js');
-const Joi = require('joi');
-
-const listSchema = Joi.object().pattern(Joi.string(), Joi.array().items(Joi.string()));
+const { getWatchlists, createOrUpdateWatchlist } = require('../../cotroller/watchlists/WatchListsController.js');
 
 router.get('/', getWatchlists);
-router.post('/', validateMiddleware(listSchema), createOrUpdateWatchlist);
+router.post('/', createOrUpdateWatchlist);
 
 module.exports = router;

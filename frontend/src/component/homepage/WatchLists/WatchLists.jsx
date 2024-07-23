@@ -5,22 +5,25 @@ export default function WatchLists({ func }) {
     const [watchlists, setWatchlists] = useState({});
     const [selectedWatchlist, setSelectedWatchlist] = useState();
     const [isOverlayVisible, setIsOverlayVisible] = useState(false);
+    const email = localStorage.getItem('email');
 
-    // Fetch watchlists from the server when the component mounts
     useEffect(() => {
         const fetchWatchlists = async () => {
             try {
-
-                const response = await fetch('http://localhost:5000/watchlists');
+                const response = await fetch(`http://localhost:5000/watchlists?email=${email}`);
                 const data = await response.json();
+
+                if (!response.ok) {
+                    console.error("Error fetching watchlists:", data.message);
+                    return;
+                }
 
                 setWatchlists(data);
 
                 const firstWatchlistName = Object.keys(data)[0];
-
                 if (firstWatchlistName) {
                     setSelectedWatchlist(firstWatchlistName);
-                    func({ name: firstWatchlistName, items: data[firstWatchlistName] });
+                    func({ name: firstWatchlistName, items: data[firstWatchlistName].items });
                 }
                 
             } catch (error) {
@@ -31,20 +34,19 @@ export default function WatchLists({ func }) {
         fetchWatchlists();
     }, [isOverlayVisible]);
 
-    // Update parent component when selected Watchlist changes
+    // Update parent component when selected watchlist changes
     useEffect(() => {
         if (selectedWatchlist) {
-            func({ name: selectedWatchlist, items: watchlists[selectedWatchlist] });
+            func({ name: selectedWatchlist, items: watchlists[selectedWatchlist]?.items });
         }
     }, [selectedWatchlist]);
 
     const handleClick = (watchlistName) => {
         setSelectedWatchlist(watchlistName);
-        func({ name: watchlistName, items: watchlists[watchlistName] });
+        func({ name: watchlistName, items: watchlists[watchlistName]?.items });
     };
 
-    const handleImageClick = async () => {
-
+    const handleImageClick = () => {
         setIsOverlayVisible(true);
     };
 

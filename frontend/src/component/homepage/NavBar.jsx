@@ -6,11 +6,11 @@ export default function NavBar() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        setSigninedUser(localStorage.getItem('signinedUser') || 'Guest');
+        setSigninedUser(localStorage.getItem('user') || 'Guest');
     }, []);
 
     const handleLogout = () => {
-        localStorage.removeItem('signinedUser');
+        localStorage.removeItem('user');
         setSigninedUser('Guest');
         navigate('/signin');
     };
