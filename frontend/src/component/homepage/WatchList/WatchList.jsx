@@ -1,36 +1,42 @@
 import { useEffect, useState } from "react";
 import AddStock from './AddStock.jsx';
+import ApexCharts from 'react-apexcharts';
 
 export default function WatchList({ name, items }) {
 
     const [isOverlay, setIsOverlay] = useState(false);
     const [symbol, setSymbol] = useState("IBM");
     const [timeframe, setTimeframe] = useState("1d");
-    const [stockData, setStockData] = useState(null);
-    const [error, setError] = useState('Loading');
+    const [stockData, setStockData] = useState();
+    const [error, setError] = useState('');
 
     const fetchStockData = async () => {
-        const response = await fetch('http://localhost:5000/stock', {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                "symbol": symbol,
-                'timeframe': timeframe
-            })
-        });
+        try {
+            const response = await fetch('http://localhost:5000/stock', {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    "symbol": symbol,
+                    'timeframe': timeframe
+                })
+            });
 
-        if (!response.ok) {
-            setError(response.arrayBuffer);
-            return;
+            if (!response.ok) {
+                setError('Failed to fetch data');
+                return;
+            }
+
+            const data = await response.json();
+            setStockData(data);
+        } catch (error) {
+            setError('Failed to fetch data');
         }
-
-        const data = await response.json();
-        setStockData(data);
     };
 
     useEffect(() => {
+        fetchStockData();
     }, [symbol, timeframe]);
 
     const handleStockClick = (stock) => {
@@ -48,6 +54,26 @@ export default function WatchList({ name, items }) {
     const handleOverlayClose = () => {
         setIsOverlay(false);
     };
+
+    // Prepare data for ApexCharts
+    const chartOptions = {
+        chart: {
+            type: 'line'
+        },
+        xaxis: {
+            categories: stockData ? Object.keys(stockData["Time Series (Daily)"]) : []
+        },
+        yaxis: {
+            title: {
+                text: 'Price'
+            }
+        }
+    };
+
+    const chartSeries = [{
+        name: 'Close Price',
+        data: stockData ? Object.values(stockData["Time Series (Daily)"]).map(day => parseFloat(day["4. close"])) : []
+    }];
 
     if (!items || !Array.isArray(items)) {
         return <div>No items available</div>;
@@ -77,14 +103,14 @@ export default function WatchList({ name, items }) {
             <div className="watchlist--graph">
                 <div className="watchlist--graph--draw">
                     {stockData ? (
-                        <div className="graph"></div>
+                        <ApexCharts className="apexgraph" options={chartOptions} series={chartSeries} type="line" height={350} />
                     ) : (
                         <p>{error}</p>
                     )}
                 </div>
                 <div className="watchlist--graph--timeframe">
                     {["1d", "1m", "6m", "1y", "all"].map((time) => (
-                        <div 
+                        <div
                             key={time}
                             onClick={() => handleTimeframeClick(time)}
                             className={`timeframe ${timeframe === time ? 'selected' : ''}`}

@@ -1,3 +1,4 @@
+/* General container styles */
 .watchlist--container {
   display: flex;
   justify-content: space-between;
@@ -8,6 +9,7 @@
   height: 70vh;
 }
 
+/* Details section */
 .watchlist--details {
   width: 30%;
   display: flex;
@@ -78,6 +80,7 @@
   cursor: pointer;
 }
 
+/* Line separating details from graph */
 .watchlist--line {
   border-left: 2px solid white;
   height: 100%;
@@ -85,6 +88,7 @@
   margin: 0;
 }
 
+/* Graph section */
 .watchlist--graph {
   width: 65%;
   height: 100%;
@@ -93,21 +97,30 @@
   flex-direction: column;
   justify-content: space-between;
 }
-.watchlist--graph--draw{
+
+.watchlist--graph--draw {
   padding: 20px;
   display: flex;
   flex-direction: column;
+  flex-grow: 1;
 }
-.watchlist--graph--draw p{
+
+.watchlist--graph--draw p {
   color: red;
   text-align: center;
 }
+
+/* Timeframe section */
 .watchlist--graph--timeframe {
+  position: absolute;
+  bottom: 40px;
+  left: 70%;
+  transform: translateX(-50%);
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 30px;
 }
+
 .timeframe {
   font-size: 14px;
   font-weight: bold;
@@ -117,10 +130,13 @@
   border-radius: 10px;
   cursor: pointer;
 }
-.timeframe.selected{
+
+.timeframe.selected {
   border: 1px solid white;
   background-color: black;
 }
+
+/* Overlay styles */
 .overlay {
   position: fixed;
   top: 0;
@@ -154,7 +170,6 @@
   border-radius: 10px;
   cursor: pointer;
 }
-
 .watchlist--separator {
   border: none;
   border-top: 2px solid white;
