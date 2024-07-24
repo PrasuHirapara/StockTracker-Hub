@@ -1,7 +1,7 @@
 const https = require('https');
 
 const fetchStockData = (symbol, interval, outputsize, datatype, callback) => {
-  const url = `https://www.alphavantage.co/query?function=${interval}&symbol=${symbol}.BSE&apikey=${process.env.ALPHA_VANTAGE_API_KEY}&outputsize=${outputsize}&datatype=${datatype}`;
+  const url = `https://www.alphavantage.co/query?function=${interval}&symbol=${symbol}.BSE&apikey=${process.env.ALPHA_VANTAGE_API_KEY_3}&outputsize=${outputsize}&datatype=${datatype}`;
 
   https.get(url, (resp) => {
     let data = '';

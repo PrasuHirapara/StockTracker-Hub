@@ -170,9 +170,73 @@
   border-radius: 10px;
   cursor: pointer;
 }
+
 .watchlist--separator {
   border: none;
   border-top: 2px solid white;
   margin: 20px 0;
   width: 100%;
+}
+
+/* Responsive */
+@media screen and (max-width: 800px) {
+  .watchlist--container {
+    flex-direction: column;
+  }
+}
+
+/* Mobile Specific Styles */
+@media screen and (max-width: 600px) {
+  .watchlist--container {
+    margin: 10px;
+    height: auto;
+  }
+
+  .watchlist--details, .watchlist--graph {
+    width: 100%;
+  }
+
+  .watchlist--details {
+    padding: 10px;
+  }
+
+  .watchlist--name {
+    font-size: 20px;
+  }
+
+  .watchlist--separator{
+    width: 80%;
+    align-self: center;
+  }
+
+  .watchlist--list > ol > li {
+    padding: 5px 10px;
+    margin: 3px 0;
+    width: 80%;
+  }
+
+  .watchlist--add {
+    position: relative;
+    bottom: 0;
+    align-self: center;
+    width: 50%;
+  }
+
+  .watchlist--graph {
+    margin-top: 20px;
+  }
+
+  .watchlist--graph--timeframe {
+    position: relative;
+    bottom: 0;
+    left: auto;
+    transform: none;
+    margin-top: 10px;
+  }
+
+  .timeframe {
+    font-size: 12px;
+    padding: 6px;
+    margin-bottom: 20px;
+  }
 }
