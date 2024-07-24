@@ -2,7 +2,7 @@ const https = require('https');
 
 const fetchStockData = (symbol, interval, outputsize, datatype, callback) => {
   const url = `https://www.alphavantage.co/query?function=${interval}&symbol=${symbol}.BSE&apikey=${process.env.ALPHA_VANTAGE_API_KEY}&outputsize=${outputsize}&datatype=${datatype}`;
-  
+
   https.get(url, (resp) => {
     let data = '';
 
@@ -11,7 +11,12 @@ const fetchStockData = (symbol, interval, outputsize, datatype, callback) => {
     });
 
     resp.on('end', () => {
-      callback(null, JSON.parse(data));
+      try {
+        const jsonData = JSON.parse(data);
+        callback(null, jsonData);
+      } catch (e) {
+        callback(new Error('Failed to parse JSON data'));
+      }
     });
 
   }).on("error", (err) => {
@@ -19,41 +24,95 @@ const fetchStockData = (symbol, interval, outputsize, datatype, callback) => {
   });
 };
 
+const filterData = (data, timeframe, interval) => {
+  let timeSeriesKey;
+
+  if (interval.includes('TIME_SERIES_INTRADAY')) {
+    timeSeriesKey = Object.keys(data).find(key => key.startsWith('Time Series'));
+  } else if (interval === 'TIME_SERIES_WEEKLY') {
+    timeSeriesKey = 'Weekly Time Series';
+  } else if (interval === 'TIME_SERIES_MONTHLY') {
+    timeSeriesKey = 'Monthly Time Series';
+  } else {
+    timeSeriesKey = 'Time Series (Daily)';
+  }
+
+  const timeSeries = data[timeSeriesKey];
+
+  if (!timeSeries) {
+    throw new Error('Time series data not found');
+  }
+
+  const dates = Object.keys(timeSeries);
+
+  let filteredDates;
+  const daysMap = {
+    '1d': 1,
+    '1w': 7,
+    '1m': 30,
+    '6m': 180,
+    '1y': 365,
+    '5y': 1825,
+    'all': dates.length
+  };
+
+  const numberOfDays = daysMap[timeframe] || daysMap['all'];
+  filteredDates = dates.slice(0, numberOfDays);
+
+  const filteredData = {};
+  filteredDates.forEach(date => {
+    filteredData[date] = timeSeries[date];
+  });
+
+  return { [timeSeriesKey]: filteredData };
+};
+
 const StockController = (req, res) => {
   const { symbol, timeframe } = req.body;
   let interval = '';
   let outputsize = 'full';
 
+  const validTimeframes = ['1d', '1w', '1m', '1y', 'all'];
+
+  if (!validTimeframes.includes(timeframe)) {
+    fetchStockData(symbol, 'TIME_SERIES_DAILY', 'full', 'json', (err, data) => {
+      if (err) {
+        return res.status(500).json({ error: 'Failed to fetch data' });
+      }
+
+      try {
+        const filteredData = filterData(data, timeframe, 'TIME_SERIES_DAILY');
+        res.json(filteredData);
+      } catch (error) {
+        res.status(500).json({ error: error.message });
+      }
+    });
+    return;
+  }
+
   switch (timeframe) {
     case '1d':
-      interval = 'TIME_SERIES_INTRADAY&interval=1min';
+      interval = 'TIME_SERIES_INTRADAY&interval=15min';
       outputsize = 'compact';
       break;
     case '1w':
-      interval = 'TIME_SERIES_WEEKLY';
-      break;
     case '1m':
-      interval = 'TIME_SERIES_MONTHLY';
-      break;
-    case '6m':
-      interval = 'TIME_SERIES_DAILY';
-      outputsize = 'compact';
-      break;
     case '1y':
-      interval = 'TIME_SERIES_DAILY';
-      break;
     case 'all':
       interval = 'TIME_SERIES_DAILY';
       break;
-    default:
-      return res.status(400).json({ error: 'Invalid timeframe' });
   }
 
   fetchStockData(symbol, interval, outputsize, 'json', (err, data) => {
     if (err) {
-      res.status(500).json({ error: 'Failed to fetch data' });
-    } else {
-      res.json(data);
+      return res.status(500).json({ error: 'Failed to fetch data' });
+    }
+
+    try {
+      const filteredData = filterData(data, timeframe, interval);
+      res.json(filteredData);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
     }
   });
 };
