@@ -24,20 +24,19 @@ export default function WatchList({ name, items }) {
             });
 
             if (!response.ok) {
-                setError('Failed to fetch data');
-                return;
+                throw new Error('Failed to fetch data');
             }
 
             const data = await response.json();
             setStockData(data);
         } catch (error) {
-            setError('Failed to fetch data');
+            setError(error.message || 'Failed to fetch data');
         }
-    }, [symbol, timeframe]); // Dependencies for fetchStockData
+    }, [symbol, timeframe]);
 
     useEffect(() => {
         fetchStockData();
-    }, [fetchStockData]); // Dependencies for useEffect
+    }, [fetchStockData]);
 
     const handleStockClick = (stock) => {
         setSymbol(stock);
@@ -101,20 +100,29 @@ export default function WatchList({ name, items }) {
                 <div className="watchlist--list">
                     <ol>
                         {items.map((stock, index) => (
-                            <li onClick={() => handleStockClick(stock)} key={index} className="watchlist--stock">
+                            <li 
+                                onClick={() => handleStockClick(stock)} 
+                                key={index} 
+                                className="watchlist--stock"
+                            >
                                 {stock}
                             </li>
                         ))}
                     </ol>
                 </div>
                 <div className="watchlist--add">
-                    <button onClick={handleOverlayOpen} className="watchlist--add-btn auth-btn">Add a stock</button>
+                    <button 
+                        onClick={handleOverlayOpen} 
+                        className="watchlist--add-btn auth-btn"
+                    >
+                        Add a stock
+                    </button>
                 </div>
             </div>
             <div className="watchlist--line"></div>
             <div className="watchlist--graph">
                 <div className="watchlist--graph--draw">
-                    {stockData ? (
+                    {Object.keys(stockData).length > 0 ? (
                         <ApexCharts 
                             options={chartOptions} 
                             series={chartSeries} 
