@@ -1,6 +1,6 @@
-const Joi = require('joi');
+const joi = require('joi');
 const { watchlistSchema } = require('../../middleware/watchlists/watchlistsValidation.js');
-const Watchlists = require('../../model/watchlists/WatchlistsModel.js');
+const { Watchlists } = require('../../model/watchlists/WatchlistsModel.js');
 
 const getWatchlists = async (req, res) => {
   try {
