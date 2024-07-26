@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import AddStock from './AddStock.jsx';
 import ApexCharts from 'react-apexcharts';
 
@@ -9,7 +9,8 @@ export default function WatchList({ name, items }) {
     const [error, setError] = useState('');
     const [symbol, setSymbol] = useState("RELIANCE");
 
-    const fetchStockData = async () => {
+    // Memoize fetchStockData function
+    const fetchStockData = useCallback(async () => {
         try {
             const response = await fetch('http://localhost:5000/stock', {
                 method: "POST",
@@ -32,11 +33,11 @@ export default function WatchList({ name, items }) {
         } catch (error) {
             setError('Failed to fetch data');
         }
-    };
+    }, [symbol, timeframe]); // Dependencies for fetchStockData
 
     useEffect(() => {
         fetchStockData();
-    }, [symbol, timeframe]);
+    }, [fetchStockData]); // Dependencies for useEffect
 
     const handleStockClick = (stock) => {
         setSymbol(stock);
