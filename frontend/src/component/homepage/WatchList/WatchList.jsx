@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import AddStock from './AddStock.jsx';
 import ApexCharts from 'react-apexcharts';
 
@@ -9,34 +9,33 @@ export default function WatchList({ name, items }) {
     const [error, setError] = useState('');
     const [symbol, setSymbol] = useState("RELIANCE");
 
-    // Memoize fetchStockData function
-    const fetchStockData = useCallback(async () => {
-        try {
-            const response = await fetch('http://localhost:5000/stock', {
-                method: "POST",
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    symbol,
-                    timeframe
-                })
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to fetch data');
-            }
-
-            const data = await response.json();
-            setStockData(data);
-        } catch (error) {
-            setError(error.message || 'Failed to fetch data');
-        }
-    }, [symbol, timeframe]);
-
     useEffect(() => {
+        const fetchStockData = async () => {
+            try {
+                const response = await fetch('http://localhost:5000/stock', {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        symbol,
+                        timeframe
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch data');
+                }
+
+                const data = await response.json();
+                setStockData(data);
+            } catch (error) {
+                setError(error.message || 'Failed to fetch data');
+            }
+        };
+
         fetchStockData();
-    }, [fetchStockData]);
+    }, [symbol, timeframe]); // Dependencies: fetch data whenever `symbol` or `timeframe` changes
 
     const handleStockClick = (stock) => {
         setSymbol(stock);
@@ -100,29 +99,20 @@ export default function WatchList({ name, items }) {
                 <div className="watchlist--list">
                     <ol>
                         {items.map((stock, index) => (
-                            <li 
-                                onClick={() => handleStockClick(stock)} 
-                                key={index} 
-                                className="watchlist--stock"
-                            >
+                            <li onClick={() => handleStockClick(stock)} key={index} className="watchlist--stock">
                                 {stock}
                             </li>
                         ))}
                     </ol>
                 </div>
                 <div className="watchlist--add">
-                    <button 
-                        onClick={handleOverlayOpen} 
-                        className="watchlist--add-btn auth-btn"
-                    >
-                        Add a stock
-                    </button>
+                    <button onClick={handleOverlayOpen} className="watchlist--add-btn auth-btn">Add a stock</button>
                 </div>
             </div>
             <div className="watchlist--line"></div>
             <div className="watchlist--graph">
                 <div className="watchlist--graph--draw">
-                    {Object.keys(stockData).length > 0 ? (
+                    {stockData ? (
                         <ApexCharts 
                             options={chartOptions} 
                             series={chartSeries} 
