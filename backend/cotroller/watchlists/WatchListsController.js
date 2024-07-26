@@ -1,6 +1,6 @@
 const Joi = require('joi');
-const watchlistSchema = require('../../middleware/watchlists/watchlistsValidation.js');
-const Watchlists = require('../../model/watchlists/WatchlistsModel');
+const watchlistValidation = require('../../middleware/watchlists/watchlistsValidation.js');
+const Watchlists = require('../../model/watchlists/WatchlistsModel.js');
 
 const getWatchlists = async (req, res) => {
   try {
@@ -24,7 +24,7 @@ const getWatchlists = async (req, res) => {
 
 const createOrUpdateWatchlist = async (req, res) => {
   try {
-    const { error, value } = watchlistSchema.validate(req.body);
+    const { error, value } = watchlistValidation.validate(req.body);
 
     if (error) {
       return res.status(400).json({ message: error.details[0].message, success: false });
