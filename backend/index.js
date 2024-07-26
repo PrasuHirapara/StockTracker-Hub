@@ -8,6 +8,7 @@ const WatchlistsRouter = require('./routes/watchlists/WatchlistsRouter.js');
 const StokeRouter = require('./routes/stock/StokeRoute.js');
 const app = express();
 
+// db connection
 connectDB();
 
 // Middleware for parsing request bodies
