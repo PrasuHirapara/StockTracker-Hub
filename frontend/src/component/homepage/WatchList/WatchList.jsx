@@ -3,6 +3,8 @@ import AddStock from './AddStock.jsx';
 import ApexCharts from 'react-apexcharts';
 
 export default function WatchList({ name, items }) {
+
+    const BASE_URL = "https://stocktracker-hub.onrender.com";
     const [isOverlay, setIsOverlay] = useState(false);
     const [timeframe, setTimeframe] = useState("1y");
     const [stockData, setStockData] = useState({});
@@ -12,7 +14,7 @@ export default function WatchList({ name, items }) {
     useEffect(() => {
         const fetchStockData = async () => {
             try {
-                const response = await fetch('http://localhost:5000/stock', {
+                const response = await fetch(`${BASE_URL}/stock`, {
                     method: "POST",
                     headers: {
                         'Content-Type': 'application/json'
@@ -35,7 +37,7 @@ export default function WatchList({ name, items }) {
         };
 
         fetchStockData();
-    }, [symbol, timeframe]); // Dependencies: fetch data whenever `symbol` or `timeframe` changes
+    }, [symbol, timeframe]);
 
     const handleStockClick = (stock) => {
         setSymbol(stock);

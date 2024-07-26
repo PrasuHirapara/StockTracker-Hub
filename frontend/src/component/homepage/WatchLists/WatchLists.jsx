@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import AddWatchList from "./AddWatchList";
 
 export default function WatchLists({ func }) {
+    
+    const BASE_URL = "https://stocktracker-hub.onrender.com";
     const [watchlists, setWatchlists] = useState({});
     const [selectedWatchlist, setSelectedWatchlist] = useState();
     const [isOverlayVisible, setIsOverlayVisible] = useState(false);
@@ -10,7 +12,7 @@ export default function WatchLists({ func }) {
     useEffect(() => {
         const fetchWatchlists = async () => {
             try {
-                const response = await fetch(`http://localhost:5000/watchlists?email=${email}`);
+                const response = await fetch(`${BASE_URL}/watchlists?email=${email}`);
                 const data = await response.json();
 
                 if (!response.ok) {

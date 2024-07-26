@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 export default function SignUp() {
+    
+    const BASE_URL = "https://stocktracker-hub.onrender.com";
     const navigate = useNavigate();
 
     const [signupInfo, setSignupInfo] = useState({
@@ -22,7 +24,7 @@ export default function SignUp() {
         e.preventDefault();
 
         try {
-            const URL = "http://localhost:5000/auth/signup";
+            const URL = `${BASE_URL}/auth/signup`;
 
             const res = await fetch(URL, {
                 method: "POST",

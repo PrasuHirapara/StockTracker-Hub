@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 export default function SignIn() {
+
+    const BASE_URL = "https://stocktracker-hub.onrender.com";
     const navigate = useNavigate();
 
     const [signinInfo, setSignInInfo] = useState({
@@ -21,7 +23,7 @@ export default function SignIn() {
         e.preventDefault();
 
         try {
-            const URL = "http://localhost:5000/auth/signin";
+            const URL = `${BASE_URL}/auth/signin`;
 
             const res = await fetch(URL, {
                 method: "POST",
