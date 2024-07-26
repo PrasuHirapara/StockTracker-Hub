@@ -3,13 +3,11 @@ import AddStock from './AddStock.jsx';
 import ApexCharts from 'react-apexcharts';
 
 export default function WatchList({ name, items }) {
-
     const [isOverlay, setIsOverlay] = useState(false);
     const [timeframe, setTimeframe] = useState("1y");
     const [stockData, setStockData] = useState({});
     const [error, setError] = useState('');
-    const [selectedStock, setSelectedStock] = useState(items[0]);
-    const [symbol, setSymbol] = useState(selectedStock || "RELIANCE");
+    const [symbol, setSymbol] = useState("RELIANCE");
 
     const fetchStockData = async () => {
         try {
@@ -19,8 +17,8 @@ export default function WatchList({ name, items }) {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    "symbol": symbol,
-                    'timeframe': timeframe
+                    symbol,
+                    timeframe
                 })
             });
 
@@ -37,7 +35,6 @@ export default function WatchList({ name, items }) {
     };
 
     useEffect(() => {
-        console.log(symbol,timeframe);
         fetchStockData();
     }, [symbol, timeframe]);
 
@@ -57,7 +54,6 @@ export default function WatchList({ name, items }) {
         setIsOverlay(false);
     };
 
-    // Prepare data for ApexCharts
     const chartOptions = {
         chart: {
             type: 'candlestick',
