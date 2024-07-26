@@ -5,4 +5,4 @@ const watchlistSchema = Joi.object({
   value: Joi.object().pattern(Joi.string(), Joi.array().items(Joi.string())).required()
 });
 
-module.exports = watchlistSchema;
+module.exports = { watchlistSchema };
