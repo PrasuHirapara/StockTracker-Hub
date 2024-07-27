@@ -39,7 +39,7 @@ export default function WatchList({ name, items, callback }) {
         };
 
         fetchStockData();
-    }, [symbol, timeframe]);
+    }, [symbol, timeframe, stockAdded]);
 
     const handleCallback = (val) => {
         setStockAdded(val);
@@ -127,11 +127,11 @@ export default function WatchList({ name, items, callback }) {
             <div className="watchlist--graph">
                 <div className="watchlist--graph--draw">
                     {stockData ? (
-                        <ApexCharts 
-                            options={chartOptions} 
-                            series={chartSeries} 
-                            type="candlestick" 
-                            height={300} 
+                        <ApexCharts
+                            options={chartOptions}
+                            series={chartSeries}
+                            type="candlestick"
+                            height={300}
                         />
                     ) : (
                         <p>{error}</p>
@@ -139,7 +139,7 @@ export default function WatchList({ name, items, callback }) {
                 </div>
                 <div className="watchlist--graph--timeframe">
                     {["1d", "1w", "1m", "6m", "1y", "all"].map((time) => (
-                        <div 
+                        <div
                             key={time}
                             onClick={() => handleTimeframeClick(time)}
                             className={`timeframe ${timeframe === time ? 'selected' : ''}`}
