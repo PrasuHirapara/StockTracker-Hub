@@ -53,15 +53,20 @@
   margin-right: 10px;
 }
 
-.watchlist--list > ol > li:hover {
-  border: 2px solid black;
-  cursor: pointer;
-  background-color: rgb(70, 69, 69);
-  border-radius: 20px;
+.watchlist--list > ol > li:hover,
+.watchlist--stock.selected:hover {
+  background-color: rgba(70, 69, 69, 0.4);
+  border: 1px solid black;
 }
 
 .watchlist--stock {
   padding: 5px 0;
+  cursor: pointer;
+}
+
+.watchlist--stock.selected {
+  background-color: rgba(70, 69, 69, 1);
+  border: 3px solid black;
 }
 
 .watchlist--add {
@@ -204,7 +209,7 @@
     font-size: 20px;
   }
 
-  .watchlist--separator{
+  .watchlist--separator {
     width: 80%;
     align-self: center;
   }

@@ -1,8 +1,8 @@
 import { useState } from "react";
+import Constant from '../../../util/Constant.js';
 
 export default function AddWatchList() {
     
-    const BASE_URL = "https://stocktracker-hub.onrender.com";
     const [watchlistName, setWatchlistName] = useState("");
 
     const handleSubmit = async (e) => {
@@ -20,7 +20,7 @@ export default function AddWatchList() {
                 alert("Watchlist name cannot be empty");
                 return;
             }
-            const response = await fetch(`${BASE_URL}/watchlists`, {
+            const response = await fetch(`${Constant.BASE_URL}/watchlists`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

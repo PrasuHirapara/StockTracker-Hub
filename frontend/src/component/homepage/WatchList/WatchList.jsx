@@ -1,20 +1,22 @@
 import { useEffect, useState } from "react";
 import AddStock from './AddStock.jsx';
 import ApexCharts from 'react-apexcharts';
+import Constant from '../../../util/Constant.js';
 
-export default function WatchList({ name, items }) {
+export default function WatchList({ name, items, callback }) {
 
-    const BASE_URL = "https://stocktracker-hub.onrender.com";
     const [isOverlay, setIsOverlay] = useState(false);
     const [timeframe, setTimeframe] = useState("1y");
     const [stockData, setStockData] = useState({});
     const [error, setError] = useState('');
-    const [symbol, setSymbol] = useState("RELIANCE");
+    const [symbol, setSymbol] = useState(items[0]);
+    const [selected, setSelected] = useState(items[0]);
+    const [stockAdded, setStockAdded] = useState(false);
 
     useEffect(() => {
         const fetchStockData = async () => {
             try {
-                const response = await fetch(`${BASE_URL}/stock`, {
+                const response = await fetch(`${Constant.BASE_URL}/stock`, {
                     method: "POST",
                     headers: {
                         'Content-Type': 'application/json'
@@ -39,8 +41,14 @@ export default function WatchList({ name, items }) {
         fetchStockData();
     }, [symbol, timeframe]);
 
+    const handleCallback = (val) => {
+        setStockAdded(val);
+        callback(stockAdded);
+    }
+
     const handleStockClick = (stock) => {
         setSymbol(stock);
+        setSelected(stock);
     };
 
     const handleTimeframeClick = (time) => {
@@ -101,7 +109,11 @@ export default function WatchList({ name, items }) {
                 <div className="watchlist--list">
                     <ol>
                         {items.map((stock, index) => (
-                            <li onClick={() => handleStockClick(stock)} key={index} className="watchlist--stock">
+                            <li
+                                onClick={() => handleStockClick(stock)}
+                                key={index}
+                                className={`watchlist--stock ${selected === stock ? 'selected' : ''}`}
+                            >
                                 {stock}
                             </li>
                         ))}
@@ -141,7 +153,7 @@ export default function WatchList({ name, items }) {
                 <div className="overlay">
                     <div className="overlay--content">
                         <button onClick={handleOverlayClose} className="overlay--close">Close</button>
-                        <AddStock />
+                        <AddStock name={name} items={items} callback={handleCallback} />
                     </div>
                 </div>
             )}

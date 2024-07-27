@@ -1,7 +1,11 @@
 const https = require('https');
 
-const fetchStockData = (symbol, interval, outputsize, datatype, callback) => {
-  const url = `https://www.alphavantage.co/query?function=${interval}&symbol=${symbol}.BSE&apikey=${process.env.ALPHA_VANTAGE_API_KEY_3}&outputsize=${outputsize}&datatype=${datatype}`;
+const fetchStockData = (symbol, interval, outputsize, datatype, apiKeys, callback, retryIndex = 0) => {
+  if (retryIndex >= apiKeys.length) {
+    return callback(new Error('All API keys failed to fetch data'));
+  }
+
+  const url = `https://www.alphavantage.co/query?function=${interval}&symbol=${symbol}.BSE&apikey=${apiKeys[retryIndex]}&outputsize=${outputsize}&datatype=${datatype}`;
 
   https.get(url, (resp) => {
     let data = '';
@@ -13,14 +17,19 @@ const fetchStockData = (symbol, interval, outputsize, datatype, callback) => {
     resp.on('end', () => {
       try {
         const jsonData = JSON.parse(data);
+
+        if (jsonData["Error Message"] || jsonData["Note"]) {
+          throw new Error('API limit reached or invalid API key');
+        }
+
         callback(null, jsonData);
       } catch (e) {
-        callback(new Error('Failed to parse JSON data'));
+        fetchStockData(symbol, interval, outputsize, datatype, apiKeys, callback, retryIndex + 1);
       }
     });
 
   }).on("error", (err) => {
-    callback(err);
+    fetchStockData(symbol, interval, outputsize, datatype, apiKeys, callback, retryIndex + 1);
   });
 };
 
@@ -69,13 +78,19 @@ const filterData = (data, timeframe, interval) => {
 
 const StockController = (req, res) => {
   const { symbol, timeframe } = req.body;
+  const apiKeys = [
+    process.env.ALPHA_VANTAGE_API_KEY_1,
+    process.env.ALPHA_VANTAGE_API_KEY_2,
+    process.env.ALPHA_VANTAGE_API_KEY_3
+  ];
+  
   let interval = '';
   let outputsize = 'full';
 
   const validTimeframes = ['1d', '1w', '1m', '1y', 'all'];
 
   if (!validTimeframes.includes(timeframe)) {
-    fetchStockData(symbol, 'TIME_SERIES_DAILY', 'full', 'json', (err, data) => {
+    fetchStockData(symbol, 'TIME_SERIES_DAILY', 'full', 'json', apiKeys, (err, data) => {
       if (err) {
         return res.status(500).json({ error: 'Failed to fetch data' });
       }
@@ -103,7 +118,7 @@ const StockController = (req, res) => {
       break;
   }
 
-  fetchStockData(symbol, interval, outputsize, 'json', (err, data) => {
+  fetchStockData(symbol, interval, outputsize, 'json', apiKeys, (err, data) => {
     if (err) {
       return res.status(500).json({ error: 'Failed to fetch data' });
     }

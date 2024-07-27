@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import Constant from '../../util/Constant.js';
 
 export default function SignIn() {
 
-    const BASE_URL = "https://stocktracker-hub.onrender.com";
     const navigate = useNavigate();
-
     const [signinInfo, setSignInInfo] = useState({
         email: "",
         password: ""
@@ -23,8 +22,8 @@ export default function SignIn() {
         e.preventDefault();
 
         try {
-            const URL = `${BASE_URL}/auth/signin`;
-
+            const URL = `${Constant.BASE_URL}/auth/signin`;
+console.log(URL);
             const res = await fetch(URL, {
                 method: "POST",
                 headers: {

@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import AddWatchList from "./AddWatchList";
+import Constant from '../../../util/Constant.js';
 
-export default function WatchLists({ func }) {
+export default function WatchLists({ func, reload}) {
     
-    const BASE_URL = "https://stocktracker-hub.onrender.com";
     const [watchlists, setWatchlists] = useState({});
     const [selectedWatchlist, setSelectedWatchlist] = useState();
     const [isOverlayVisible, setIsOverlayVisible] = useState(false);
@@ -12,7 +12,7 @@ export default function WatchLists({ func }) {
     useEffect(() => {
         const fetchWatchlists = async () => {
             try {
-                const response = await fetch(`${BASE_URL}/watchlists?email=${email}`);
+                const response = await fetch(`${Constant.BASE_URL}/watchlists?email=${email}`);
                 const data = await response.json();
 
                 if (!response.ok) {
@@ -34,7 +34,7 @@ export default function WatchLists({ func }) {
         };
 
         fetchWatchlists();
-    }, [isOverlayVisible]);
+    }, [isOverlayVisible,reload]);
 
     // Update parent component when selected watchlist changes
     useEffect(() => {
