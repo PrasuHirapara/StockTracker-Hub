@@ -2,13 +2,19 @@ import { useState } from "react";
 import Constant from '../../../util/Constant.js';
 
 export default function AddWatchList() {
-    
+
     const [watchlistName, setWatchlistName] = useState("");
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         try {
+            console.log(JSON.stringify({
+                email,
+                value: {
+                    [watchlistName.trim()]: []
+                }
+            }));
             const email = localStorage.getItem('email');
 
             if (!email) {

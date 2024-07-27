@@ -22,6 +22,7 @@ export default function SignUp() {
         e.preventDefault();
 
         try {
+            console.log(JSON.stringify(signupInfo));
             const URL = `${Constant.BASE_URL}/auth/signup`;
 
             const res = await fetch(URL, {

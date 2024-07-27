@@ -22,8 +22,8 @@ export default function SignIn() {
         e.preventDefault();
 
         try {
+            console.log(JSON.stringify(signinInfo));
             const URL = `${Constant.BASE_URL}/auth/signin`;
-console.log(URL);
             const res = await fetch(URL, {
                 method: "POST",
                 headers: {

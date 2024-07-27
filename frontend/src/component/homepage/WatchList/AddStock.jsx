@@ -19,6 +19,12 @@ export default function AddStock({ name, items, callback }) {
         }
 
         try {
+            console.log(JSON.stringify({
+                email: email,
+                value: {
+                    [name]: [...items, stockName.trim()]
+                }
+            }));
             const response = await fetch(`${Constant.BASE_URL}/watchlists`, {
                 method: "POST",
                 headers: {

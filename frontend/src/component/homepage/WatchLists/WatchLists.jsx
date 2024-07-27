@@ -11,6 +11,7 @@ export default function WatchLists({ func, reload}) {
 
     useEffect(() => {
         const fetchWatchlists = async () => {
+            console.log(`${Constant.BASE_URL}/watchlists?email=${email}`);
             try {
                 const response = await fetch(`${Constant.BASE_URL}/watchlists?email=${email}`);
                 const data = await response.json();

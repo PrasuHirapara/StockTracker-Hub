@@ -9,36 +9,49 @@ export default function WatchList({ name, items, callback }) {
     const [timeframe, setTimeframe] = useState("1y");
     const [stockData, setStockData] = useState({});
     const [error, setError] = useState('');
-    const [symbol, setSymbol] = useState(items[0]);
-    const [selected, setSelected] = useState(items[0]);
+    const [symbol, setSymbol] = useState(null);
+    const [selected, setSelected] = useState(null);
     const [stockAdded, setStockAdded] = useState(false);
 
     useEffect(() => {
-        const fetchStockData = async () => {
-            try {
-                const response = await fetch(`${Constant.BASE_URL}/stock`, {
-                    method: "POST",
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
+        if (items && items.length > 0) {
+            setSymbol(items[0]);
+            setSelected(items[0]);
+        }
+    }, [items]);
+
+    useEffect(() => {
+        if (symbol) {
+            const fetchStockData = async () => {
+                try {
+                    console.log(JSON.stringify({
                         symbol,
                         timeframe
-                    })
-                });
+                    }));
+                    const response = await fetch(`${Constant.BASE_URL}/stock`, {
+                        method: "POST",
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            symbol,
+                            timeframe
+                        })
+                    });
 
-                if (!response.ok) {
-                    throw new Error('Failed to fetch data');
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch data');
+                    }
+
+                    const data = await response.json();
+                    setStockData(data);
+                } catch (error) {
+                    setError(error.message || 'Failed to fetch data');
                 }
+            };
 
-                const data = await response.json();
-                setStockData(data);
-            } catch (error) {
-                setError(error.message || 'Failed to fetch data');
-            }
-        };
-
-        fetchStockData();
+            fetchStockData();
+        }
     }, [symbol, timeframe, stockAdded]);
 
     const handleCallback = (val) => {
