@@ -5,7 +5,7 @@ const fetchStockData = (symbol, interval, outputsize, datatype, apiKeys, callbac
     return callback(new Error('All API keys failed to fetch data'));
   }
 
-  const url = `https://www.alphavantage.co/query?function=${interval}&symbol=${symbol}.BSE&apikey=${apiKeys[retryIndex]}&outputsize=${outputsize}&datatype=${datatype}`;
+  const url = `https://www.alphavantage.co/query?function=${interval}&symbol=${symbol}&apikey=${apiKeys[retryIndex]}&outputsize=${outputsize}&datatype=${datatype}`;
 
   https.get(url, (resp) => {
     let data = '';

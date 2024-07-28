@@ -35,14 +35,14 @@ export default function WatchLists({ func, reload}) {
         };
 
         fetchWatchlists();
-    }, [isOverlayVisible,reload]);
+    }, [isOverlayVisible, reload]);
 
     // Update parent component when selected watchlist changes
     useEffect(() => {
         if (selectedWatchlist) {
             func({ name: selectedWatchlist, items: watchlists[selectedWatchlist]?.items });
         }
-    }, [selectedWatchlist]);
+    }, [selectedWatchlist, reload]);
 
     const handleClick = (watchlistName) => {
         setSelectedWatchlist(watchlistName);

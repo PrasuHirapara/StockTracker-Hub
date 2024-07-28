@@ -38,7 +38,7 @@ export default function SignIn() {
                 localStorage.setItem("token", result.jwtToken);
                 localStorage.setItem("email",result.email);
                 localStorage.setItem("user", result.name);
-                localStorage.setItem("isSignin", result.success);
+                localStorage.setItem("isSignin", true);
                 setTimeout(() => {
                     navigate('/homepage');
                 }, 500);

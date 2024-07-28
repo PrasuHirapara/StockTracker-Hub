@@ -13,6 +13,7 @@ export default function Home() {
 
     const callbackFunction = (val) => {
         setStockAdded(val);
+        console.log(setStockAdded);
     }
 
     return (

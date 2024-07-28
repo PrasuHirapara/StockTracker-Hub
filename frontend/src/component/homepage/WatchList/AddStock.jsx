@@ -1,9 +1,48 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Constant from '../../../util/Constant.js';
 
 export default function AddStock({ name, items, callback }) {
-    const [stockName, setStockName] = useState('');
     const email = localStorage.getItem('email');
+    const [stockName, setStockName] = useState('');
+    const [suggestions, setSuggestions] = useState([]);
+    const [updateParent, setUpdateParent] = useState(1);
+
+    const handleStockNameChange = async (name) => {
+        setStockName(name);
+
+        if (name.trim() === '') {
+            setSuggestions([]);
+            return;
+        }
+
+        try {
+            const response = await fetch(`${Constant.BASE_URL}/stock/suggestion`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ symbol: name })
+            });
+
+            if (!response.ok) {
+                console.error("Something went wrong");
+                return;
+            }
+
+            const data = await response.json();
+            setSuggestions(data.bestMatches || []);
+            console.log(data);
+
+        } catch (error) {
+            console.error(error.message);
+        }
+    };
+
+    useEffect(() => {
+        if (stockName) {
+            handleStockNameChange(stockName);
+        }
+    }, [stockName]);
 
     const handleAddStock = async (e) => {
         e.preventDefault();
@@ -19,12 +58,6 @@ export default function AddStock({ name, items, callback }) {
         }
 
         try {
-            console.log(JSON.stringify({
-                email: email,
-                value: {
-                    [name]: [...items, stockName.trim()]
-                }
-            }));
             const response = await fetch(`${Constant.BASE_URL}/watchlists`, {
                 method: "POST",
                 headers: {
@@ -45,7 +78,10 @@ export default function AddStock({ name, items, callback }) {
             }
 
             setStockName('');
-            callback(true);
+            setSuggestions([]);
+            let newUpdateParent = updateParent + 1;
+            setUpdateParent(newUpdateParent);
+            callback(newUpdateParent);
             alert("Stock added successfully");
 
         } catch (e) {
@@ -70,6 +106,24 @@ export default function AddStock({ name, items, callback }) {
                 />
                 <button className="addstock--btn auth-btn" type="submit">Add</button>
             </form>
+            {suggestions.length > 0 && (
+                <ul className="suggestions-list">
+                    {suggestions.slice(0, 5).map((suggestion, index) => (
+                        <li key={index} onClick={() => setStockName(suggestion.symbol)}>
+                            {suggestion.name} ({suggestion.symbol})
+                        </li>
+                    ))}
+                    {suggestions.length > 5 && (
+                        <div className="suggestions-scrollable">
+                            {suggestions.slice(5).map((suggestion, index) => (
+                                <li key={index + 5} onClick={() => setStockName(suggestion.symbol)}>
+                                    {suggestion.name} ({suggestion.symbol})
+                                </li>
+                            ))}
+                        </div>
+                    )}
+                </ul>
+            )}
         </div>
     );
 }

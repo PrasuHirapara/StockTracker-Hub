@@ -11,6 +11,7 @@ export default function NavBar() {
 
     const handleLogout = () => {
         localStorage.removeItem('user');
+        localStorage.removeItem('isSignin');
         setSigninedUser('Guest');
         navigate('/signin');
     };

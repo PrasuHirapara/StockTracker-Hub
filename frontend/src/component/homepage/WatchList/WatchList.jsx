@@ -4,7 +4,6 @@ import ApexCharts from 'react-apexcharts';
 import Constant from '../../../util/Constant.js';
 
 export default function WatchList({ name, items, callback }) {
-
     const [isOverlay, setIsOverlay] = useState(false);
     const [timeframe, setTimeframe] = useState("1y");
     const [stockData, setStockData] = useState({});
@@ -24,19 +23,11 @@ export default function WatchList({ name, items, callback }) {
         if (symbol) {
             const fetchStockData = async () => {
                 try {
-                    console.log(JSON.stringify({
-                        symbol,
-                        timeframe
-                    }));
+                    console.log(JSON.stringify({ symbol, timeframe }));
                     const response = await fetch(`${Constant.BASE_URL}/stock`, {
                         method: "POST",
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            symbol,
-                            timeframe
-                        })
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ symbol, timeframe })
                     });
 
                     if (!response.ok) {
@@ -56,8 +47,8 @@ export default function WatchList({ name, items, callback }) {
 
     const handleCallback = (val) => {
         setStockAdded(val);
-        callback(stockAdded);
-    }
+        callback(val);
+    };
 
     const handleStockClick = (stock) => {
         setSymbol(stock);
@@ -79,20 +70,34 @@ export default function WatchList({ name, items, callback }) {
     const chartOptions = {
         chart: {
             type: 'candlestick',
-            height: 350
+            height: 350,
+            background: 'var(--secondary)',
+            foreColor: 'var(--tertiary)'
         },
         title: {
-            text: 'CandleStick Chart',
-            align: 'left'
+            text: `${symbol}`,
+            align: 'left',
+            style: {
+                color: 'var(--tertiary)'
+            }
         },
         xaxis: {
-            type: 'datetime'
+            type: 'datetime',
+            style: {
+                color: 'var(--tertiary)'
+            }
         },
         yaxis: {
             tooltip: {
                 enabled: true
+            },
+            style: {
+                color: 'var(--tertiary)'
             }
-        }
+        },
+        tooltip: {
+            theme: 'dark'
+        },
     };
 
     const chartSeries = [{
@@ -115,9 +120,7 @@ export default function WatchList({ name, items, callback }) {
     return (
         <div className="watchlist--container">
             <div className="watchlist--details">
-                <div className="watchlist--name">
-                    {name}
-                </div>
+                <div className="watchlist--name">{name}</div>
                 <hr className="watchlist--separator" />
                 <div className="watchlist--list">
                     <ol>
