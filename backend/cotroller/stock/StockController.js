@@ -89,9 +89,8 @@ const StockController = (req, res) => {
 
   const { symbol, timeframe } = req.body;
 
-  if(!symbol || !timeframe){
-    res.status(500).send({ message: `invalid symbol or timeframe ${symbol, timeframe}`, success: false })
-  }
+  res.status(500).send({ message: `invalid symbol or timeframe ${symbol, timeframe}`, success: false })
+
 
   const apiKeys = [
     process.env.ALPHA_VANTAGE_API_KEY_1,
