@@ -23,7 +23,6 @@ export default function WatchList({ name, items, callback }) {
         if (symbol) {
             const fetchStockData = async () => {
                 try {
-                    console.log(JSON.stringify({ symbol, timeframe }));
                     const response = await fetch(`${Constant.BASE_URL}/stock`, {
                         method: "POST",
                         headers: { 'Content-Type': 'application/json' },
@@ -41,7 +40,7 @@ export default function WatchList({ name, items, callback }) {
                 }
             };
 
-            fetchStockData();
+            // fetchStockData();
         }
     }, [symbol, timeframe, stockAdded]);
 

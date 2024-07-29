@@ -63,18 +63,20 @@ export default function AddStock({ name, items, callback }) {
                 })
             });
 
-            const responseData = await response.json();
 
-            if (!responseData.success) {
+            if (!response.ok) {
                 alert(`Error: ${responseData.message}`);
                 return;
             }
 
+            const responseData = await response.json();
             setStockName('');
             setSuggestions([]);
+
             let newUpdateParent = updateParent + 1;
             setUpdateParent(newUpdateParent);
             callback(newUpdateParent);
+
             alert("Stock added successfully");
 
         } catch (e) {
@@ -103,7 +105,7 @@ export default function AddStock({ name, items, callback }) {
                     </button>
                     <button className="auth-btn" type="submit">Add</button>
                 </div>
-                
+
             </form>
             {suggestions.length > 0 && (
                 <ul className="suggestions-list">
