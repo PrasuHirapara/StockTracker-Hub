@@ -104,7 +104,7 @@ const StockController = (req, res) => {
         const filteredData = filterData(data, timeframe, 'TIME_SERIES_DAILY');
         res.json(filteredData);
       } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ error: error.message, success: false });
       }
     });
     return;
@@ -125,14 +125,14 @@ const StockController = (req, res) => {
 
   fetchStockData(symbol, interval, outputsize, 'json', apiKeys, (err, data) => {
     if (err) {
-      return res.status(500).json({ error: 'Failed to fetch data' });
+      return res.status(500).json({ error: 'Failed to fetch data', success: false });
     }
 
     try {
       const filteredData = filterData(data, timeframe, interval);
-      res.json(filteredData);
+      res.status(200).json(filteredData);
     } catch (error) {
-      res.status(500).json({ error: error.message });
+      res.status(500).json({ error: error.message, success: false });
     }
   });
 };
