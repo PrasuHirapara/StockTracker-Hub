@@ -58,7 +58,7 @@ const filterData = (data, timeframe, interval) => {
   const timeSeries = data[timeSeriesKey];
 
   if (!timeSeries) {
-    throw new Error('Time series data not found');
+    throw new Error(`Time series data not found ${data[0]}`);
   }
 
   const dates = Object.keys(timeSeries);
