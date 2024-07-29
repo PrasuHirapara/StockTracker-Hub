@@ -89,8 +89,8 @@ const StockController = (req, res) => {
 
   const { symbol, timeframe } = req.body;
 
-  if(!symbol || !timeframe){
-    res.status(500).send({message: `invalid symbol or timeframe ${symbol, timeframe}`, success: false })
+  if (!symbol || !timeframe) {
+    res.status(500).send({ message: `invalid symbol or timeframe ${symbol, timeframe}`, success: false })
   }
 
   const apiKeys = [
@@ -113,7 +113,8 @@ const StockController = (req, res) => {
 
       try {
         const filteredData = filterData(data, timeframe, 'TIME_SERIES_DAILY');
-        res.status(200).json({data: filteredData, success:true});
+        res.status(200).json(filteredData);
+        res.status(200).json({ data: filteredData, success: true });
       } catch (error) {
         console.error('Error filtering data:', error);
         res.status(500).json({ error: error.message, success: false });
@@ -143,7 +144,7 @@ const StockController = (req, res) => {
 
     try {
       const filteredData = filterData(data, timeframe, interval);
-      res.status(200).json({data:filteredData, success: true});
+      res.status(200).json(filteredData);
     } catch (error) {
       console.error('Error filtering data:', error);
       res.status(500).json({ error: error.message, success: false });
