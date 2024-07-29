@@ -9,6 +9,23 @@ export default function SignUp() {
         email: "",
         password: ""
     });
+    const defaultList = {
+        "email": signupInfo.email,
+        "value": {
+            "TATA": [
+                "TATACHEM.BSE",
+                "TATACOMM.BSE",
+                "TATAELXSI.BSE",
+                "TATAPOWER.BSE",
+                "TATASTEEL.BSE",
+                "TATACONSUM.BSE",
+                "TATAINVEST.BSE",
+                "TATAMOTORS.BSE",
+                "TATAMTRDVR.BSE",
+                "TATAYODOGA.BSE"
+            ]
+        }
+    };
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -18,11 +35,28 @@ export default function SignUp() {
         });
     }
 
+    const addDefaultWatchlist = async () => {
+        const response = await fetch(`${Constant.BASE_URL}/watchlists`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(defaultList),
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            alert(`Error: ${errorData.message}`);
+            return;
+        }
+
+        console.log("Default list added.");
+    }
+
     const handleSignUp = async (e) => {
         e.preventDefault();
 
         try {
-            console.log(JSON.stringify(signupInfo));
             const URL = `${Constant.BASE_URL}/auth/signup`;
 
             const res = await fetch(URL, {
@@ -32,9 +66,11 @@ export default function SignUp() {
                 },
                 body: JSON.stringify(signupInfo)
             });
-
             const result = await res.json();
+
             if (result.success) {
+                addDefaultWatchlist();
+
                 setTimeout(() => {
                     navigate('/signin');
                 }, 500);

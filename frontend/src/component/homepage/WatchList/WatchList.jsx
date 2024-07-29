@@ -40,7 +40,7 @@ export default function WatchList({ name, items, callback }) {
                 }
             };
 
-            // fetchStockData();
+            fetchStockData();
         }
     }, [symbol, timeframe, stockAdded]);
 
