@@ -58,7 +58,7 @@ const filterData = (data, timeframe, interval) => {
   const timeSeries = data[timeSeriesKey];
 
   if (!timeSeries) {
-    throw new Error(`Time series data not found ${data[0]}`);
+    throw new Error(`Time series data not found. ${data[0]}`);
   }
 
   const dates = Object.keys(timeSeries);
@@ -88,6 +88,11 @@ const filterData = (data, timeframe, interval) => {
 const StockController = (req, res) => {
 
   const { symbol, timeframe } = req.body;
+
+  if(!symbol || !timeframe){
+    res.status(500).send({ message: `invalid symbol or timeframe ${symbol, timeframe}`, success: false })
+  }
+
   const apiKeys = [
     process.env.ALPHA_VANTAGE_API_KEY_1,
     process.env.ALPHA_VANTAGE_API_KEY_2,
