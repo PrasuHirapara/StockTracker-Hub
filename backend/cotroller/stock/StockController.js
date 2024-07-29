@@ -54,7 +54,7 @@ const filterData = (data, timeframe, interval) => {
   const timeSeries = data[timeSeriesKey];
 
   if (!timeSeries) {
-    throw new Error('Time series data not found');
+    throw new Error(data);
   }
 
   const dates = Object.keys(timeSeries);
@@ -97,6 +97,7 @@ const StockController = (req, res) => {
   if (!validTimeframes.includes(timeframe)) {
     fetchStockData(symbol, 'TIME_SERIES_DAILY', 'full', 'json', apiKeys, (err, data) => {
       if (err) {
+        console.log(err);
         return res.status(500).json({ error: 'Failed to fetch data' });
       }
 
@@ -104,6 +105,7 @@ const StockController = (req, res) => {
         const filteredData = filterData(data, timeframe, 'TIME_SERIES_DAILY');
         res.json(filteredData);
       } catch (error) {
+        console.log(error);
         res.status(500).json({ error: error.message, success: false });
       }
     });
@@ -125,6 +127,7 @@ const StockController = (req, res) => {
 
   fetchStockData(symbol, interval, outputsize, 'json', apiKeys, (err, data) => {
     if (err) {
+      console.log(err);
       return res.status(500).json({ error: 'Failed to fetch data', success: false });
     }
 
@@ -132,6 +135,7 @@ const StockController = (req, res) => {
       const filteredData = filterData(data, timeframe, interval);
       res.status(200).json(filteredData);
     } catch (error) {
+      console.log(error);
       res.status(500).json({ error: error.message, success: false });
     }
   });
