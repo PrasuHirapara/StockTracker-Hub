@@ -2,6 +2,7 @@ const https = require('https');
 
 const fetchStockData = (symbol, interval, outputsize, datatype, apiKeys, callback, retryIndex = 0) => {
   if (retryIndex >= apiKeys.length) {
+    console.error('All API keys failed to fetch data');
     return callback(new Error('All API keys failed to fetch data'));
   }
 
@@ -24,16 +25,19 @@ const fetchStockData = (symbol, interval, outputsize, datatype, apiKeys, callbac
         const jsonData = JSON.parse(data);
 
         if (jsonData["Error Message"] || jsonData["Note"]) {
+          console.error('API limit reached or invalid API key:', jsonData);
           throw new Error('API limit reached or invalid API key');
         }
 
         callback(null, jsonData);
       } catch (e) {
+        console.error('Error parsing JSON data or other issue:', e);
         fetchStockData(symbol, interval, outputsize, datatype, apiKeys, callback, retryIndex + 1);
       }
     });
 
-  }).on("error", () => {
+  }).on("error", (err) => {
+    console.error('HTTP request error:', err);
     fetchStockData(symbol, interval, outputsize, datatype, apiKeys, callback, retryIndex + 1);
   });
 };
@@ -54,7 +58,7 @@ const filterData = (data, timeframe, interval) => {
   const timeSeries = data[timeSeriesKey];
 
   if (!timeSeries) {
-    throw new Error(data);
+    throw new Error('Time series data not found');
   }
 
   const dates = Object.keys(timeSeries);
@@ -82,6 +86,8 @@ const filterData = (data, timeframe, interval) => {
 };
 
 const StockController = (req, res) => {
+  console.log('Request received');
+
   const { symbol, timeframe } = req.body;
   const apiKeys = [
     process.env.ALPHA_VANTAGE_API_KEY_1,
@@ -97,15 +103,15 @@ const StockController = (req, res) => {
   if (!validTimeframes.includes(timeframe)) {
     fetchStockData(symbol, 'TIME_SERIES_DAILY', 'full', 'json', apiKeys, (err, data) => {
       if (err) {
-        console.log(err);
-        return res.status(500).json({ error: 'Failed to fetch data' });
+        console.error('Error fetching data:', err);
+        return res.status(500).json({ error: err.message, success: false });
       }
 
       try {
         const filteredData = filterData(data, timeframe, 'TIME_SERIES_DAILY');
-        res.json(filteredData);
+        res.status(200).json(filteredData);
       } catch (error) {
-        console.log(error);
+        console.error('Error filtering data:', error);
         res.status(500).json({ error: error.message, success: false });
       }
     });
@@ -127,15 +133,15 @@ const StockController = (req, res) => {
 
   fetchStockData(symbol, interval, outputsize, 'json', apiKeys, (err, data) => {
     if (err) {
-      console.log(err);
-      return res.status(500).json({ error: 'Failed to fetch data', success: false });
+      console.error('Error fetching data:', err);
+      return res.status(500).json({ error: err.message, success: false });
     }
 
     try {
       const filteredData = filterData(data, timeframe, interval);
       res.status(200).json(filteredData);
     } catch (error) {
-      console.log(error);
+      console.error('Error filtering data:', error);
       res.status(500).json({ error: error.message, success: false });
     }
   });
