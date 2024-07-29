@@ -57,9 +57,13 @@
 
 .addstock--btn {
   position: absolute;
+  display: flex;
   bottom: 5px;
 }
 
+.addstock--btn button{
+  margin-right: 5px;
+}
 .suggestions-list {
   list-style: none;
   padding: 0;

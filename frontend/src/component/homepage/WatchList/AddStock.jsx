@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Constant from '../../../util/Constant.js';
 
 export default function AddStock({ name, items, callback }) {
@@ -7,10 +7,8 @@ export default function AddStock({ name, items, callback }) {
     const [suggestions, setSuggestions] = useState([]);
     const [updateParent, setUpdateParent] = useState(1);
 
-    const handleStockNameChange = async (name) => {
-        setStockName(name);
-
-        if (name.trim() === '') {
+    const handleFetchSuggestions = async () => {
+        if (stockName.trim() === '') {
             setSuggestions([]);
             return;
         }
@@ -21,7 +19,7 @@ export default function AddStock({ name, items, callback }) {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ symbol: name })
+                body: JSON.stringify({ symbol: stockName })
             });
 
             if (!response.ok) {
@@ -37,12 +35,6 @@ export default function AddStock({ name, items, callback }) {
             console.error(error.message);
         }
     };
-
-    useEffect(() => {
-        if (stockName) {
-            handleStockNameChange(stockName);
-        }
-    }, [stockName]);
 
     const handleAddStock = async (e) => {
         e.preventDefault();
@@ -71,9 +63,10 @@ export default function AddStock({ name, items, callback }) {
                 })
             });
 
-            if (!response.ok) {
-                const errorData = await response.json();
-                alert(`Error: ${errorData.message}`);
+            const responseData = await response.json();
+
+            if (!responseData.success) {
+                alert(`Error: ${responseData.message}`);
                 return;
             }
 
@@ -104,7 +97,13 @@ export default function AddStock({ name, items, callback }) {
                     autoFocus
                     required
                 />
-                <button className="addstock--btn auth-btn" type="submit">Add</button>
+                <div className="addstock--btn">
+                    <button type="button" className="auth-btn" onClick={handleFetchSuggestions}>
+                        Search
+                    </button>
+                    <button className="auth-btn" type="submit">Add</button>
+                </div>
+                
             </form>
             {suggestions.length > 0 && (
                 <ul className="suggestions-list">

@@ -5,7 +5,12 @@ const fetchStockData = (symbol, interval, outputsize, datatype, apiKeys, callbac
     return callback(new Error('All API keys failed to fetch data'));
   }
 
-  const url = `https://www.alphavantage.co/query?function=${interval}&symbol=${symbol}&apikey=${apiKeys[retryIndex]}&outputsize=${outputsize}&datatype=${datatype}`;
+  const apiKey = apiKeys[retryIndex];
+  if (!apiKey) {
+    return fetchStockData(symbol, interval, outputsize, datatype, apiKeys, callback, retryIndex + 1);
+  }
+
+  const url = `https://www.alphavantage.co/query?function=${interval}&symbol=${symbol}&apikey=${apiKey}&outputsize=${outputsize}&datatype=${datatype}`;
 
   https.get(url, (resp) => {
     let data = '';
@@ -28,7 +33,7 @@ const fetchStockData = (symbol, interval, outputsize, datatype, apiKeys, callbac
       }
     });
 
-  }).on("error", (err) => {
+  }).on("error", () => {
     fetchStockData(symbol, interval, outputsize, datatype, apiKeys, callback, retryIndex + 1);
   });
 };
@@ -83,11 +88,11 @@ const StockController = (req, res) => {
     process.env.ALPHA_VANTAGE_API_KEY_2,
     process.env.ALPHA_VANTAGE_API_KEY_3
   ];
-  
+
   let interval = '';
   let outputsize = 'full';
 
-  const validTimeframes = ['1d', '1w', '1m', '1y', 'all'];
+  const validTimeframes = ['1w', '1m', '1y', 'all'];
 
   if (!validTimeframes.includes(timeframe)) {
     fetchStockData(symbol, 'TIME_SERIES_DAILY', 'full', 'json', apiKeys, (err, data) => {

@@ -8,7 +8,8 @@ export default function App() {
   const [isSignin, setIsSignin] = useState(false);
 
   useEffect(() => {
-    setIsSignin(localStorage.getItem('isSignin') === 'true');
+    setIsSignin(localStorage.getItem('isSignin'));
+    console.log(isSignin);
   }, []);
 
   return (

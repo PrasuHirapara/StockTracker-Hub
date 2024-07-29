@@ -22,7 +22,6 @@ const fetchSuggestions = (symbol, keyIndex = 0, res) => {
 
         apiRes.on('end', () => {
             try {
-                console.log(`Response from API key index ${keyIndex}: ${data}`);  // Debugging line
 
                 const jsonResponse = JSON.parse(data);
 
