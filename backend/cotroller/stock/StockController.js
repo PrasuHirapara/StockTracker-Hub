@@ -86,65 +86,66 @@ const filterData = (data, timeframe, interval) => {
 };
 
 const StockController = (req, res) => {
-  console.log('Request received');
+  res.status(200).send({message: "Hello World", success: true })
+  // console.log('Request received');
 
-  const { symbol, timeframe } = req.body;
-  const apiKeys = [
-    process.env.ALPHA_VANTAGE_API_KEY_1,
-    process.env.ALPHA_VANTAGE_API_KEY_2,
-    process.env.ALPHA_VANTAGE_API_KEY_3
-  ];
+  // const { symbol, timeframe } = req.body;
+  // const apiKeys = [
+  //   process.env.ALPHA_VANTAGE_API_KEY_1,
+  //   process.env.ALPHA_VANTAGE_API_KEY_2,
+  //   process.env.ALPHA_VANTAGE_API_KEY_3
+  // ];
 
-  let interval = '';
-  let outputsize = 'full';
+  // let interval = '';
+  // let outputsize = 'full';
 
-  const validTimeframes = ['1w', '1m', '1y', 'all'];
+  // const validTimeframes = ['1w', '1m', '1y', 'all'];
 
-  if (!validTimeframes.includes(timeframe)) {
-    fetchStockData(symbol, 'TIME_SERIES_DAILY', 'full', 'json', apiKeys, (err, data) => {
-      if (err) {
-        console.error('Error fetching data:', err);
-        return res.status(500).json({ error: err.message, success: false });
-      }
+  // if (!validTimeframes.includes(timeframe)) {
+  //   fetchStockData(symbol, 'TIME_SERIES_DAILY', 'full', 'json', apiKeys, (err, data) => {
+  //     if (err) {
+  //       console.error('Error fetching data:', err);
+  //       return res.status(500).json({ error: err.message, success: false });
+  //     }
 
-      try {
-        const filteredData = filterData(data, timeframe, 'TIME_SERIES_DAILY');
-        res.status(200).json(filteredData);
-      } catch (error) {
-        console.error('Error filtering data:', error);
-        res.status(500).json({ error: error.message, success: false });
-      }
-    });
-    return;
-  }
+  //     try {
+  //       const filteredData = filterData(data, timeframe, 'TIME_SERIES_DAILY');
+  //       res.status(200).json(filteredData);
+  //     } catch (error) {
+  //       console.error('Error filtering data:', error);
+  //       res.status(500).json({ error: error.message, success: false });
+  //     }
+  //   });
+  //   return;
+  // }
 
-  switch (timeframe) {
-    case '1d':
-      interval = 'TIME_SERIES_INTRADAY&interval=15min';
-      outputsize = 'compact';
-      break;
-    case '1w':
-    case '1m':
-    case '1y':
-    case 'all':
-      interval = 'TIME_SERIES_DAILY';
-      break;
-  }
+  // switch (timeframe) {
+  //   case '1d':
+  //     interval = 'TIME_SERIES_INTRADAY&interval=15min';
+  //     outputsize = 'compact';
+  //     break;
+  //   case '1w':
+  //   case '1m':
+  //   case '1y':
+  //   case 'all':
+  //     interval = 'TIME_SERIES_DAILY';
+  //     break;
+  // }
 
-  fetchStockData(symbol, interval, outputsize, 'json', apiKeys, (err, data) => {
-    if (err) {
-      console.error('Error fetching data:', err);
-      return res.status(500).json({ error: err.message, success: false });
-    }
+  // fetchStockData(symbol, interval, outputsize, 'json', apiKeys, (err, data) => {
+  //   if (err) {
+  //     console.error('Error fetching data:', err);
+  //     return res.status(500).json({ error: err.message, success: false });
+  //   }
 
-    try {
-      const filteredData = filterData(data, timeframe, interval);
-      res.status(200).json(filteredData);
-    } catch (error) {
-      console.error('Error filtering data:', error);
-      res.status(500).json({ error: error.message, success: false });
-    }
-  });
+  //   try {
+  //     const filteredData = filterData(data, timeframe, interval);
+  //     res.status(200).json(filteredData);
+  //   } catch (error) {
+  //     console.error('Error filtering data:', error);
+  //     res.status(500).json({ error: error.message, success: false });
+  //   }
+  // });
 };
 
 module.exports = StockController;
