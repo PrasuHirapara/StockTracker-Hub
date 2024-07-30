@@ -9,12 +9,6 @@ export default function AddWatchList() {
         e.preventDefault();
 
         try {
-            console.log(JSON.stringify({
-                email,
-                value: {
-                    [watchlistName.trim()]: []
-                }
-            }));
             const email = localStorage.getItem('email');
 
             if (!email) {

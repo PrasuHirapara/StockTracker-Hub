@@ -9,7 +9,6 @@ export default function App() {
 
   useEffect(() => {
     setIsSignin(localStorage.getItem('isSignin'));
-    console.log(isSignin);
   }, []);
 
   return (
