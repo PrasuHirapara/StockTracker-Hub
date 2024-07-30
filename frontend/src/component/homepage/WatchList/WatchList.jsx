@@ -29,11 +29,12 @@ export default function WatchList({ name, items, callback }) {
                         body: JSON.stringify({ symbol, timeframe })
                     });
 
+                    const data = await response.json();
+
                     if (!response.ok) {
-                        throw new Error('Failed to fetch data');
+                        throw new Error(`Failed to fetch data : ${data.message}`);
                     }
 
-                    const data = await response.json();
                     setStockData(data);
                 } catch (error) {
                     setError(error.message || 'Failed to fetch data');
