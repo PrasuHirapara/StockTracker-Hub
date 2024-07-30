@@ -10,6 +10,7 @@ body{
   margin: 0px;
   background: var(--primary);
   color: var(--tertiary);
+  overflow-x: hidden;
 }
 :root {
   --primary: #0d1117;

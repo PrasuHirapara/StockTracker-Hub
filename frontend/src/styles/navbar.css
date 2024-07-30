@@ -46,3 +46,25 @@
 .navbar--btn:hover {
     background-color: #e60000;
 }
+
+@media screen and (max-width: 600px) {
+    .navbar--container{
+        width: 100%;
+    }
+    .navbar--title{
+        font-size: 20px;
+    }
+    .navbar--info{
+        padding: 0px;
+    }
+    .navbar--profile{
+        padding-right: 20px;
+    }
+    .navbar--btn{
+        font-size: 15px;
+        margin-right: 10px;
+    }
+    h2{
+        font-size: 20px;
+    }
+}
