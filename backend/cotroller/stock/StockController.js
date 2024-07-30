@@ -86,11 +86,10 @@ const filterData = (data, timeframe, interval) => {
 };
 
 const StockController = (req, res) => {
-
   const { symbol, timeframe } = req.body;
 
   if (!symbol || !timeframe) {
-    res.status(500).send({ message: `invalid symbol or timeframe ${symbol, timeframe}`, success: false })
+    return res.status(500).send({ message: `Invalid symbol or timeframe ${symbol}, ${timeframe}`, success: false });
   }
 
   const apiKeys = [
@@ -113,11 +112,10 @@ const StockController = (req, res) => {
 
       try {
         const filteredData = filterData(data, timeframe, 'TIME_SERIES_DAILY');
-        res.status(200).json(filteredData);
-        res.status(200).json({ data: filteredData, success: true });
+        return res.status(200).json({ data: filteredData, success: true });
       } catch (error) {
         console.error('Error filtering data:', error);
-        res.status(500).json({ error: error.message, success: false });
+        return res.status(500).json({ error: error.message, success: false });
       }
     });
     return;
@@ -144,12 +142,15 @@ const StockController = (req, res) => {
 
     try {
       const filteredData = filterData(data, timeframe, interval);
-      res.status(200).json(filteredData);
+      return res.status(200).json({ data: filteredData, success: true });
     } catch (error) {
       console.error('Error filtering data:', error);
-      res.status(500).json({ error: error.message, success: false });
+      return res.status(500).json({ error: error.message, success: false });
     }
   });
 };
+
+module.exports = StockController;
+
 
 module.exports = StockController;

@@ -10,6 +10,7 @@ export default function WatchList({ name, items, callback }) {
     const [error, setError] = useState('');
     const [symbol, setSymbol] = useState(null);
     const [selected, setSelected] = useState(null);
+    const [loading, setLoading] = useState(false);
     const [stockAdded, setStockAdded] = useState(false);
 
     useEffect(() => {
@@ -22,6 +23,8 @@ export default function WatchList({ name, items, callback }) {
     useEffect(() => {
         if (symbol) {
             const fetchStockData = async () => {
+                setLoading(true);
+                setError('');
                 try {
                     const response = await fetch(`${Constant.BASE_URL}/stock`, {
                         method: "POST",
@@ -32,12 +35,14 @@ export default function WatchList({ name, items, callback }) {
                     const data = await response.json();
 
                     if (!response.ok) {
-                        throw new Error(`Failed to fetch data : ${data.message}`);
+                        throw new Error(data.message || 'Failed to fetch data');
                     }
 
-                    setStockData(data);
+                    setStockData(data.data);
                 } catch (error) {
-                    setError(error.message || 'Failed to fetch data');
+                    setError(error.message);
+                } finally {
+                    setLoading(false);
                 }
             };
 
@@ -105,11 +110,22 @@ export default function WatchList({ name, items, callback }) {
         data: stockData && stockData["Time Series (Daily)"]
             ? Object.keys(stockData["Time Series (Daily)"]).map(date => {
                 const { "1. open": open, "2. high": high, "3. low": low, "4. close": close } = stockData["Time Series (Daily)"][date];
+
+                const openNum = parseFloat(open);
+                const highNum = parseFloat(high);
+                const lowNum = parseFloat(low);
+                const closeNum = parseFloat(close);
+
+                if (isNaN(openNum) || isNaN(highNum) || isNaN(lowNum) || isNaN(closeNum)) {
+                    console.warn(`Invalid data for date ${date}:`, { open, high, low, close });
+                    return null;
+                }
+
                 return {
                     x: new Date(date).getTime(),
-                    y: [parseFloat(open), parseFloat(high), parseFloat(low), parseFloat(close)]
+                    y: [openNum, highNum, lowNum, closeNum]
                 };
-            })
+            }).filter(dataPoint => dataPoint !== null)
             : []
     }];
 
@@ -142,15 +158,17 @@ export default function WatchList({ name, items, callback }) {
             <div className="watchlist--line"></div>
             <div className="watchlist--graph">
                 <div className="watchlist--graph--draw">
-                    {stockData ? (
+                    {loading ? (
+                        <p>Loading data...</p>
+                    ) : error ? (
+                        <p>{error}</p>
+                    ) : (
                         <ApexCharts
                             options={chartOptions}
                             series={chartSeries}
                             type="candlestick"
                             height={300}
                         />
-                    ) : (
-                        <p>{error}</p>
                     )}
                 </div>
                 <div className="watchlist--graph--timeframe">
