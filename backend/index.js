@@ -12,8 +12,8 @@ const app = express();
 connectDB();
 
 // Middleware for parsing request bodies
-app.use(express.json());
 app.use(cors())
+app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 // routes
