@@ -22,6 +22,7 @@ export default function WatchList({ name, items, callback }) {
 
     useEffect(() => {
         if (symbol) {
+            console.log(symbol);
             const fetchStockData = async () => {
                 setLoading(true);
                 setError('');
