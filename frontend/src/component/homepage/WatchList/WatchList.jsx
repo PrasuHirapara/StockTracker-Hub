@@ -29,7 +29,11 @@ export default function WatchList({ name, items, callback }) {
                 try {
                     const response = await fetch(`${Constant.BASE_URL}/stock`, {
                         method: "POST",
-                        headers: { 'Content-Type': 'application/json' },
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': 'Bearer BFS2N29LZCIAC54Y',
+                            'Accept': 'application/json'
+                        },
                         body: JSON.stringify({ symbol, timeframe })
                     });
 
