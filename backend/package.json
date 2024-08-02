@@ -4,7 +4,7 @@
   "description": "Stock watchlist manager",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index.js",
+    "start": "node index.js",
     "build": "npm install",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -19,8 +19,5 @@
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.8.0",
     "mongoose": "^8.5.1"
-  },
-  "devDependencies": {
-    "nodemon": "^3.1.4"
   }
 }
