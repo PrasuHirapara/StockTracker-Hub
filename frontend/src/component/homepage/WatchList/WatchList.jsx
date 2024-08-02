@@ -31,8 +31,6 @@ export default function WatchList({ name, items, callback }) {
                         method: "POST",
                         headers: {
                             'Content-Type': 'application/json',
-                            'Authorization': 'Bearer BFS2N29LZCIAC54Y',
-                            'Accept': 'application/json'
                         },
                         body: JSON.stringify({ symbol, timeframe })
                     });
@@ -42,6 +40,16 @@ export default function WatchList({ name, items, callback }) {
                     if (!response.ok) {
                         throw new Error(data.message || 'Failed to fetch data');
                     }
+
+                    const headers = response.headers;
+
+                    console.log('Content-Type:', headers.get('Content-Type'));
+                    console.log('Content-Length:', headers.get('Content-Length'));
+                    console.log('ETag:', headers.get('ETag'));
+                    console.log('Date:', headers.get('Date'));
+                    console.log('Connection:', headers.get('Connection'));
+                    console.log('Keep-Alive:', headers.get('Keep-Alive'));
+
 
                     setStockData(data.data);
                 } catch (error) {

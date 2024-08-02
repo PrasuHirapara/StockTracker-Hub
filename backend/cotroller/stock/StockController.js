@@ -13,7 +13,16 @@ const fetchStockData = (symbol, interval, outputsize, datatype, apiKeys, callbac
 
   const url = `https://www.alphavantage.co/query?function=${interval}&symbol=${symbol}&apikey=${apiKey}&outputsize=${outputsize}&datatype=${datatype}`;
 
-  https.get(url, (resp) => {
+  const options = {
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Connection': 'keep-alive',
+      'Keep-Alive': 'timeout=5'
+    }
+  };
+
+  https.get(url, options, (resp) => {
     let data = '';
 
     resp.on('data', (chunk) => {
@@ -86,11 +95,10 @@ const filterData = (data, timeframe, interval) => {
 };
 
 const StockController = (req, res) => {
-  
   const { symbol, timeframe } = req.body;
 
   if (!symbol || !timeframe) {
-    return res.status(500).send({ message: `Invalid symbol or timeframe ${symbol}, ${timeframe}`, success: false });
+    return res.status(400).send({ message: `Invalid symbol or timeframe ${symbol}, ${timeframe}`, success: false });
   }
 
   const apiKeys = [
@@ -150,8 +158,5 @@ const StockController = (req, res) => {
     }
   });
 };
-
-module.exports = StockController;
-
 
 module.exports = StockController;
