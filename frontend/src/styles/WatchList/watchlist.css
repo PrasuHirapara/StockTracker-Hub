@@ -30,6 +30,32 @@
   margin-bottom: 60px;
 }
 
+.watchlist--list--container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  padding: 0px 10px 0px 10px;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.watchlist--list--container:hover,
+.watchlist--list--container.selected {
+  background-color: rgba(70, 69, 69, 0.4);
+  border: 1px solid black;
+}
+
+.watchlist--list--container.selected {
+  background-color: rgba(70, 69, 69, 1);
+  border: 3px solid black;
+}
+
+.watchlist--list--container img{
+  height: auto;
+  width: 35px;
+}
 .watchlist--list > ol {
   list-style: none;
   padding: 0;
@@ -49,22 +75,6 @@
   content: counter(list-item) ". ";
   counter-increment: list-item;
   margin-right: 10px;
-}
-
-.watchlist--list > ol > li:hover,
-.watchlist--stock.selected:hover {
-  background-color: rgba(70, 69, 69, 0.4);
-  border: 1px solid black;
-}
-
-.watchlist--stock {
-  padding: 5px 0;
-  cursor: pointer;
-}
-
-.watchlist--stock.selected {
-  background-color: rgba(70, 69, 69, 1);
-  border: 3px solid black;
 }
 
 .watchlist--add {

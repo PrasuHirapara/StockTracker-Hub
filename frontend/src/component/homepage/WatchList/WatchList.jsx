@@ -22,7 +22,6 @@ export default function WatchList({ name, items, callback }) {
 
     useEffect(() => {
         if (symbol) {
-            console.log(symbol);
             const fetchStockData = async () => {
                 setLoading(true);
                 setError('');
@@ -40,16 +39,6 @@ export default function WatchList({ name, items, callback }) {
                     if (!response.ok) {
                         throw new Error(data.message || 'Failed to fetch data');
                     }
-
-                    const headers = response.headers;
-
-                    console.log('Content-Type:', headers.get('Content-Type'));
-                    console.log('Content-Length:', headers.get('Content-Length'));
-                    console.log('ETag:', headers.get('ETag'));
-                    console.log('Date:', headers.get('Date'));
-                    console.log('Connection:', headers.get('Connection'));
-                    console.log('Keep-Alive:', headers.get('Keep-Alive'));
-
 
                     setStockData(data.data);
                 } catch (error) {
@@ -83,6 +72,30 @@ export default function WatchList({ name, items, callback }) {
 
     const handleOverlayClose = () => {
         setIsOverlay(false);
+    };
+
+    const handleDeleteStock = async (stock) => {
+        const email = localStorage.getItem("email");
+        const listName = name;
+        const item = stock
+        try {
+            const response = await fetch(`${Constant.BASE_URL}/watchlists`, {
+                method: "DELETE",
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email, listName, item })
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to delete stock');
+            }
+
+            const updatedItems = items.filter(item => item !== stock);
+            callback(updatedItems);
+        } catch (error) {
+            setError(error.message);
+        }
     };
 
     const chartOptions = {
@@ -154,13 +167,20 @@ export default function WatchList({ name, items, callback }) {
                 <div className="watchlist--list">
                     <ol>
                         {items.map((stock, index) => (
-                            <li
-                                onClick={() => handleStockClick(stock)}
+                            <div
                                 key={index}
-                                className={`watchlist--stock ${selected === stock ? 'selected' : ''}`}
-                            >
-                                {stock}
-                            </li>
+                                onClick={() => handleStockClick(stock)}
+                                className={`watchlist--list--container ${selected === stock ? 'selected' : ''}`}>
+                                <li
+                                    className={`watchlist--stock`}
+                                >
+                                    {stock}
+                                </li>
+                                <img
+                                    onClick={() => handleDeleteStock(stock)}
+                                    src="./photos/minus_icon.png" 
+                                    alt="remove watchlist" />
+                            </div>
                         ))}
                     </ol>
                 </div>
