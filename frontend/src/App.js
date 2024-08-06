@@ -17,7 +17,6 @@ export default function App() {
       <Route path='/homepage' element={isSignin ? <Home /> : <Navigate to='/signin' />} />
       <Route path='/signin' element={<SignIn />} />
       <Route path='/signup' element={<SignUp />} />
-      <Route path='*' element={<SignUp />} />
     </Routes>
   );
 }
