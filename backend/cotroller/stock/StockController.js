@@ -12,7 +12,8 @@ const fetchStockData = (symbol, interval, outputsize, datatype, apiKeys, callbac
   }
 
   const url = `https://www.alphavantage.co/query?function=${interval}&symbol=${symbol}&apikey=${apiKey}&outputsize=${outputsize}&datatype=${datatype}`;
-
+  console.log(url);
+  
   const options = {
     headers: {
       'Content-Type': 'application/json',
@@ -32,6 +33,8 @@ const fetchStockData = (symbol, interval, outputsize, datatype, apiKeys, callbac
     resp.on('end', () => {
       try {
         const jsonData = JSON.parse(data);
+        console.log(jsonData);
+        
 
         if (jsonData["Error Message"] || jsonData["Note"]) {
           console.error('API limit reached or invalid API key:', jsonData);
