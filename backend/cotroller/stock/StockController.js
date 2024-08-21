@@ -32,9 +32,7 @@ const fetchStockData = (symbol, interval, outputsize, datatype, apiKeys, callbac
 
     resp.on('end', () => {
       try {
-        const jsonData = JSON.parse(data);
-        console.log(jsonData);
-        
+        const jsonData = JSON.parse(data);        
 
         if (jsonData["Error Message"] || jsonData["Note"]) {
           console.error('API limit reached or invalid API key:', jsonData);
