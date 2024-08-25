@@ -12,7 +12,6 @@ const fetchStockData = (symbol, interval, outputsize, datatype, apiKeys, callbac
   }
 
   const url = `https://www.alphavantage.co/query?function=${interval}&symbol=${symbol}&apikey=${apiKey}&outputsize=${outputsize}&datatype=${datatype}`;
-  console.log(url);
   
   const options = {
     headers: {

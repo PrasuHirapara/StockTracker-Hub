@@ -4,6 +4,8 @@ import ApexCharts from 'react-apexcharts';
 import Constant from '../../../util/Constant.js';
 
 export default function WatchList({ name, items, callback }) {
+    const validTimeframe = ['1m', '6m', '1y','all'];
+
     const [isOverlay, setIsOverlay] = useState(false);
     const [timeframe, setTimeframe] = useState("1y");
     const [stockData, setStockData] = useState({});
@@ -21,36 +23,56 @@ export default function WatchList({ name, items, callback }) {
     }, [items]);
 
     useEffect(() => {
-        if (symbol) {
+        if (symbol && timeframe) {
             const fetchStockData = async () => {
                 setLoading(true);
                 setError('');
                 try {
-                    const response = await fetch(`${Constant.BASE_URL}/stock`, {
-                        method: "POST",
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({ symbol, timeframe })
-                    });
-
-                    const data = await response.json();
-
-                    if (!response.ok) {
-                        throw new Error(data.message || 'Failed to fetch data');
+                    // Check local storage for the stock data
+                    const storedStockData = JSON.parse(localStorage.getItem('stockData')) || {};
+                    const stockDataForSymbol = storedStockData[symbol]?.[timeframe];
+    
+                    if (stockDataForSymbol) {
+                        setStockData(stockDataForSymbol);
+                    } else {
+                        // Fetch data from the server if not found in local storage
+                        const response = await fetch(`${Constant.BASE_URL}/stock`, {
+                            method: "POST",
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({ symbol, timeframe })
+                        });
+    
+                        const data = await response.json();
+    
+                        if (!response.ok) {
+                            throw new Error(data.message || 'Failed to fetch data');
+                        }
+    
+                        // Store fetched data in local storage
+                        const updatedStockData = {
+                            ...storedStockData,
+                            [symbol]: {
+                                ...storedStockData[symbol],
+                                [timeframe]: data.data
+                            }
+                        };
+                        localStorage.setItem('stockData', JSON.stringify(updatedStockData));
+    
+                        setStockData(data.data);
                     }
-
-                    setStockData(data.data);
                 } catch (error) {
                     setError(error.message);
                 } finally {
                     setLoading(false);
                 }
             };
-
+    
             fetchStockData();
         }
     }, [symbol, timeframe, stockAdded]);
+    
 
     const handleCallback = (val) => {
         setStockAdded(val);
