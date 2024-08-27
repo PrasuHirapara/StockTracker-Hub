@@ -4,7 +4,7 @@ import ApexCharts from 'react-apexcharts';
 import Constant from '../../../util/Constant.js';
 
 export default function WatchList({ name, items, callback }) {
-    const validTimeframe = ['1m', '6m', '1y','all'];
+    const validTimeframe = ['6m', '1y','all'];
 
     const [isOverlay, setIsOverlay] = useState(false);
     const [timeframe, setTimeframe] = useState("1y");
