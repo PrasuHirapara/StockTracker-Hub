@@ -21,6 +21,14 @@ app.use('/auth', AuthRouter);
 app.use('/watchlists', WatchlistsRouter);
 app.use('/stock', StokeRouter);
 
+// test
+app.get('/test', (req, res) => {
+    res.status(200).send({
+        message: "Test successful",
+        code: "OK"
+    });
+});
+
 // start server
 const port = process.env.PORT || 10000;
 app.listen(port, () => {
