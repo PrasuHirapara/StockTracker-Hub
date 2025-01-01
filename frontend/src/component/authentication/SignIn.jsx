@@ -83,6 +83,9 @@ export default function SignIn() {
                     <button className='auth-btn' type='submit'>Sign In</button>
                     <div className="auth--link">
                         <span>
+                            Sign in as Guest
+                        </span>
+                        <span>
                             Don't have an account?
                             <Link to="/signup">  Sign up</Link>
                         </span>
